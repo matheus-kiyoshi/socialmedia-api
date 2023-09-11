@@ -1,8 +1,9 @@
 class User {
   constructor(
-    public icon: string,
     public username: string,
-    public password: string
+    public password: string,
+    public nickname?: string,
+    public icon?: string
   ) {}
 }
 

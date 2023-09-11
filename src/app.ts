@@ -1,7 +1,9 @@
 import express, { Application } from 'express'
 import cors from 'cors'
+import 'path'
 import { errorMiddleware } from './middlewares/error.middleware'
 import { UserRoutes } from './routes/user.routes'
+import { connect } from './infra/db'
 
 class App {
 	public app: Application
@@ -11,6 +13,7 @@ class App {
 		this.middlewaresInitialize()
 		this.interceptionError()
 		this.initializeRoutes()
+		connect()
 	}
 
 	private initializeRoutes() {
