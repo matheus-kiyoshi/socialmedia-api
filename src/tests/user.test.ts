@@ -27,7 +27,7 @@ describe('User Controller', () => {
   it('should be unauthorized', async () => {
     // need jwt
     await request(express)
-      .patch('/api/users/loginteste')
+      .patch('/api/users/loginteste/password')
       .send({ currentPassword: 'passeiopau', newPassword: 'passeiopau2' })
       .expect(401)
   })

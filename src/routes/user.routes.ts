@@ -3,6 +3,7 @@ import { UserRepositoryMongoose } from '../repositories/UserRepositoryMongoose'
 import { UserUseCases } from '../useCases/UserUseCases'
 import { UserController } from '../controllers/UserController'
 import checkToken from '../middlewares/checkToken.middleware'
+import { upload } from '../infra/multer'
 
 class UserRoutes {
   public router: Router
@@ -31,9 +32,15 @@ class UserRoutes {
       this.userController.findUser.bind(this.userController)
     )
     this.router.patch(
-      '/users/:username',
+      '/users/:username/password',
       checkToken,
       this.userController.updatePassword.bind(this.userController)
+    )
+    this.router.patch(
+      '/users/:username/profile',
+      checkToken,
+      upload.single('icon'),
+      this.userController.updateProfile.bind(this.userController)
     )
     this.router.delete(
       '/users/:username',

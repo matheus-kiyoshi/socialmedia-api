@@ -10,7 +10,9 @@
     - DONE
   - `/api/users/:username` (GET) => Get User Public Data
     - DONE
-  - `/api/users/:username` (PATCH) => (need jwt) Update user password
+  - `/api/users/:username/password` (PATCH) => (need jwt) Update user password
+    - DONE
+  - `/api/users/:username/profile` (PATCH) => (need jwt) Update user data
     - DONE
   - `/api/users/:username` (DELETE) => (need jwt) Delete user
     - DONE

@@ -57,6 +57,24 @@ class UserController {
     }
   }
 
+  async updateProfile(req: Request, res: Response, next: NextFunction) {
+    const { username } = req.params
+    const { nickname, bio } = req.body
+    const file = req.file
+    let icon
+
+    if (file) {
+      icon = file.filename  
+    }
+
+    try {
+      await this.userUseCase.updateProfile(username, nickname, bio, icon)
+      return res.status(200).json({ message: 'Profile updated' })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async findByUsername(req: Request, res: Response, next: NextFunction) {
     const { username } = req.body
 

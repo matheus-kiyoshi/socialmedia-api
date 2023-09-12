@@ -35,9 +35,10 @@ class UserUseCases {
 
     // default attributes
     user.nickname = user.username
-    user.following = 0
-    user.followers = 0
+    user.following = []
+    user.followers = []
     user.postsCount = 0    
+    user.bio = ''
     
     const defaultIcon = resolve(__dirname, '../../public/default-icon.jpg')
     user.icon = this.imageToBase64(defaultIcon)
@@ -144,6 +145,29 @@ class UserUseCases {
 
     await this.userRepository.deleteUser(user._id)
     return { msg: 'User deleted' }
+  }
+
+  async updateProfile(username: string, nickname: string, bio: string,  icon?: string) {
+    if (!username) {
+      throw new HttpException('Username is required', 400)
+    }
+    if (!nickname) {
+      throw new HttpException('Nickname is required', 400)
+    }
+    
+    const user = await this.userRepository.findByUsername(username)
+    if (!user) {
+      throw new HttpException('User not found', 404)
+    }
+
+    user.nickname = nickname
+    user.bio = bio
+    if (icon) {
+      user.icon = this.imageToBase64(resolve(__dirname, `../tmp/uploads/${icon}`))
+    }
+
+    const updateProfile = await this.userRepository.updateProfile(user)
+    return updateProfile
   }
 
   async findByUsername(username: string) {

@@ -2,21 +2,26 @@ import mongoose from 'mongoose'
 import { PublicUser, UserRepository, UserWithID } from './UserRepository'
 import User from '../entities/User'
 
-const userSchema = new mongoose.Schema({
+const UserModel = mongoose.model('User', new mongoose.Schema({
   _id: {
     type: String,
     default: new mongoose.Types.ObjectId().toString()
   },
-  nickname: String,
   username: String,
   password: String,
-  followers: Number,
-  following: Number,
-  postsCount: Number,
-  icon: String
-})
-
-const UserModel = mongoose.model('User', userSchema)
+  nickname: String,
+  bio: String,
+  icon: String,
+  followers: {
+    type: Array,
+    ref: 'User'
+  },
+  following: {
+    type: Array,
+    ref: 'User'
+  },
+  postsCount: Number
+}))
 
 class UserRepositoryMongoose implements UserRepository {
   async create(user: User): Promise<unknown> {
@@ -39,6 +44,20 @@ class UserRepositoryMongoose implements UserRepository {
   
   async deleteUser(id: string): Promise<unknown> {
     const userModel = await UserModel.findByIdAndDelete(id)
+
+    return userModel ? userModel.toObject() : undefined
+  }
+
+  async updateProfile(user: UserWithID): Promise<PublicUser | undefined> {
+    const userModel = await UserModel.findByIdAndUpdate(
+      user._id,
+      { 
+        icon: user.icon,
+        bio: user.bio,
+        nickname: user.nickname 
+      },
+      { new: true }
+    ).select('-password -__v -_id')
 
     return userModel ? userModel.toObject() : undefined
   }
