@@ -36,6 +36,12 @@ class UserRepositoryMongoose implements UserRepository {
 
     return userModel ? userModel.toObject() : undefined
   }
+  
+  async deleteUser(id: string): Promise<unknown> {
+    const userModel = await UserModel.findByIdAndDelete(id)
+
+    return userModel ? userModel.toObject() : undefined
+  }
 
   async findByUsername(username: string): Promise<UserWithID | undefined> {
     const userModel = await UserModel.findOne({ username: username }).exec()

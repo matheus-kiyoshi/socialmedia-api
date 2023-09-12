@@ -45,6 +45,18 @@ class UserController {
     }
   }
 
+  async deleteUser(req: Request, res: Response, next: NextFunction) {
+    const { username } = req.params
+    const { password } = req.body
+
+    try {
+      await this.userUseCase.deleteUser(username, password)
+      return res.status(200).json({ message: 'User deleted' })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async findByUsername(req: Request, res: Response, next: NextFunction) {
     const { username } = req.body
 
@@ -65,7 +77,7 @@ class UserController {
       if (!user) {
         return res.status(404).json({ message: 'User not found' })
       }
-      
+
       return res.status(200).json(user)
     } catch (error) {
       next(error)

@@ -18,6 +18,7 @@ export interface PublicUser {
 interface UserRepository {
   create(user: User): Promise<unknown>
   updatePassword(user: UserWithID): Promise<UserWithID | undefined>
+  deleteUser(id: string): Promise<unknown>
   findByUsername(username: string): Promise<UserWithID | undefined>
   findUser(username: string): Promise<PublicUser | undefined>
 }

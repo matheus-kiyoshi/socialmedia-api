@@ -122,6 +122,30 @@ class UserUseCases {
     return result
   }
 
+  async deleteUser(username: string, password: string) {
+    if (!username) {
+      throw new HttpException('Username is required', 400)
+    }
+    if (!password) {
+      throw new HttpException('Password is required', 400)
+    }
+
+    // verify if user exists
+    const user = await this.userRepository.findByUsername(username)
+    if (!user) {
+      throw new HttpException('User not found', 404)
+    }
+
+    // verify password
+    const passwordMatch = await bcrypt.compare(password, user.password)
+    if (!passwordMatch) {
+      throw new HttpException('Invalid password', 422)
+    }
+
+    await this.userRepository.deleteUser(user._id)
+    return { msg: 'User deleted' }
+  }
+
   async findByUsername(username: string) {
     if (!username) {
       throw new HttpException('Username is required', 404)

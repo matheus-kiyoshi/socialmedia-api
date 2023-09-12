@@ -35,6 +35,11 @@ class UserRoutes {
       checkToken,
       this.userController.updatePassword.bind(this.userController)
     )
+    this.router.delete(
+      '/users/:username',
+      checkToken,
+      this.userController.deleteUser.bind(this.userController)
+    )
   }
 }
 
