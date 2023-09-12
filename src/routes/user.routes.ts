@@ -20,10 +20,14 @@ class UserRoutes {
       '/register',
       this.userController.create.bind(this.userController)
     )
-    // this.router.post(
-    //   '/login',
-    //   this.userController.login.bind(this.userController)
-    // )
+    this.router.post(
+      '/login',
+      this.userController.login.bind(this.userController)
+    )
+    this.router.get(
+      '/users',
+      this.userController.login.bind(this.userController)
+    )
   }
 }
 

@@ -20,9 +20,22 @@ class UserController {
 
   async login(req: Request, res: Response, next: NextFunction) {
     const { username, password } = req.body
+    
     try {
       const user = await this.userUseCase.login(username, password)
       return res.status(200).json(user)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async findByUsername(req: Request, res: Response, next: NextFunction) {
+    const { username } = req.body
+
+    try {
+      const user = await this.userUseCase.findByUsername(username)
+      console.log(user)
+      return user
     } catch (error) {
       next(error)
     }

@@ -2,6 +2,10 @@ import mongoose from 'mongoose'
 import { UserRepository } from './UserRepository'
 import User from '../entities/User'
 
+interface UserWithID extends User {
+  _id: string
+}
+
 const userSchema = new mongoose.Schema({
   _id: {
     type: String,
@@ -22,6 +26,12 @@ class UserRepositoryMongoose implements UserRepository {
     await userModel.save()
 
     return userModel
+  }
+
+  async findByUsername(username: string): Promise<UserWithID | undefined> {
+    const userModel = await UserModel.findOne({ username: username }).exec()
+
+    return userModel ? userModel.toObject() : undefined
   }
 }
 

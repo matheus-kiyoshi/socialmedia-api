@@ -4,7 +4,7 @@ import User from '../entities/User'
 import * as fs from 'fs'
 import * as mime from 'mime'
 import bcrypt from 'bcrypt'
-// import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import 'dotenv/config'
 import { resolve } from 'path'
 
@@ -44,35 +44,44 @@ class UserUseCases {
       throw new HttpException('Password is required', 400)
     }
 
-    // const user = await this.userRepository.findByEmail(email)
-    // if (!user) {
-    //   throw new HttpException('User not found', 404)
-    // }
+    const user = await this.userRepository.findByUsername(username)
+    if (!user) {
+      throw new HttpException('User not found', 404)
+    }
 
     // verify password
-    // const passwordMatch = await bcrypt.compare(password, user.password)
-    // if (!passwordMatch) {
-    //   throw new HttpException('Invalid password', 422)
-    // }
+    const passwordMatch = await bcrypt.compare(password, user.password)
+    if (!passwordMatch) {
+      throw new HttpException('Invalid password', 422)
+    }
 
-    // try {
-    //   const secret =
-    //     process.env.SECRET ||
-    //     'DA312D3124WAOIB521UDVPONA52152DGPWAB521DYNVWAD412WO44123217659AVBH'
-    //   const token = jwt.sign(
-    //     {
-    //       id: user._id
-    //     },
-    //     secret,
-    //     {
-    //       expiresIn: '1d'
-    //     }
-    //   )
+    try {
+      const secret =
+        process.env.SECRET ||
+        'DA312D3124WAOIB521UDVPONA52152DGPWAB521DYNVWAD412WO44123217659AVBH'
+      const token = jwt.sign(
+        {
+          id: user._id
+        },
+        secret,
+        {
+          expiresIn: '1d'
+        }
+      )
 
-    //   return { msg: 'Login successful', token: token, id: user._id }
-    // } catch (error) {
-    //   throw new HttpException('Internal server error', 500)
-    // }
+      return { msg: 'Login successful', token: token, id: user._id }
+    } catch (error) {
+      throw new HttpException('Internal server error', 500)
+    }
+  }
+
+  async findByUsername(username: string) {
+    if (!username) {
+      throw new HttpException('Username is required', 404)
+    }
+
+    const user = await this.userRepository.findByUsername(username)
+    return user
   }
 
   imageToBase64(filePath: string): string {
