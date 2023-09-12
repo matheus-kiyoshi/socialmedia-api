@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch ./src/main.ts",
-    "test": "jest"
+    "test": "jest --forceExit"
   },
   "keywords": [],
   "author": "",

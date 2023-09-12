@@ -24,13 +24,23 @@ class UserUseCases {
     }
 
     // verify if user already exists
+    user.username = user.username.toLowerCase()
+    const userExists = await this.userRepository.findByUsername(user.username)
+    if (userExists) {
+      throw new HttpException('User already exists', 409)
+    }
 
     const salt = await bcrypt.genSalt(10)
     user.password = await bcrypt.hash(user.password, salt)
 
+    // default attributes
     user.nickname = user.username
+    user.following = 0
+    user.followers = 0
+    user.postsCount = 0    
+    
     const defaultIcon = resolve(__dirname, '../../public/default-icon.jpg')
-    user.icon = await this.imageToBase64(defaultIcon)
+    user.icon = this.imageToBase64(defaultIcon)
 
     const result = await this.userRepository.create(user)
     return result
@@ -75,12 +85,58 @@ class UserUseCases {
     }
   }
 
+  async updatePassword(
+    username: string,
+    currentPassword: string,
+    newPassword: string
+  ) {
+    if (!username) {
+      throw new HttpException('Username is required', 400)
+    }
+    if (!currentPassword) {
+      throw new HttpException('Password is required', 400)
+    }
+    if (!newPassword) {
+      throw new HttpException('New password is required', 400)
+    }
+    if (newPassword.length < 8) {
+      throw new HttpException('New password must be at least 8 characters', 400)
+    }
+    let user = await this.userRepository.findByUsername(username)
+    if (!user) {
+      throw new HttpException('User not found', 404)
+    }
+
+    // verify password
+    const passwordMatch = await bcrypt.compare(currentPassword, user.password)
+    if (!passwordMatch) {
+      throw new HttpException('Invalid password', 422)
+    }
+
+    const salt = await bcrypt.genSalt(10)
+    newPassword = await bcrypt.hash(newPassword, salt)
+
+    user = { ...user, password: newPassword }
+
+    const result = await this.userRepository.updatePassword(user)
+    return result
+  }
+
   async findByUsername(username: string) {
     if (!username) {
       throw new HttpException('Username is required', 404)
     }
 
     const user = await this.userRepository.findByUsername(username)
+    return user
+  }
+
+  async findUser(username: string) {
+    if (!username) {
+      throw new HttpException('Username is required', 404)
+    }
+
+    const user = await this.userRepository.findUser(username)
     return user
   }
 

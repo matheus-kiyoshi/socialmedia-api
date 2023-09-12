@@ -1,10 +1,6 @@
 import mongoose from 'mongoose'
-import { UserRepository } from './UserRepository'
+import { PublicUser, UserRepository, UserWithID } from './UserRepository'
 import User from '../entities/User'
-
-interface UserWithID extends User {
-  _id: string
-}
 
 const userSchema = new mongoose.Schema({
   _id: {
@@ -14,6 +10,9 @@ const userSchema = new mongoose.Schema({
   nickname: String,
   username: String,
   password: String,
+  followers: Number,
+  following: Number,
+  postsCount: Number,
   icon: String
 })
 
@@ -28,8 +27,24 @@ class UserRepositoryMongoose implements UserRepository {
     return userModel
   }
 
+  async updatePassword(user: UserWithID): Promise<UserWithID | undefined> {
+    const userModel = await UserModel.findByIdAndUpdate(
+      user._id,
+      { password: user.password },
+      { new: true }
+    )
+
+    return userModel ? userModel.toObject() : undefined
+  }
+
   async findByUsername(username: string): Promise<UserWithID | undefined> {
     const userModel = await UserModel.findOne({ username: username }).exec()
+
+    return userModel ? userModel.toObject() : undefined
+  }
+
+  async findUser(username: string): Promise<PublicUser | undefined> {
+    const userModel = await UserModel.findOne({ username: username }).select('-password -__v -_id').exec()
 
     return userModel ? userModel.toObject() : undefined
   }
