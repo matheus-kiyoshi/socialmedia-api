@@ -80,6 +80,21 @@ class UserRepositoryMongoose implements UserRepository {
     return 'Followed'
   }
 
+  async unfollowUser(user: UserWithID, user2: UserWithID): Promise<string> {
+    const userModel = await UserModel.findByIdAndUpdate(
+      user._id,
+      { $pull: { following: user2._id } },
+      { new: true }
+    )
+    const userModel2 = await UserModel.findByIdAndUpdate(
+      user2._id,
+      { $pull: { followers: user._id } },
+      { new: true }
+    )
+    
+    return 'Unfollowed'
+  }
+
   async findByUsername(username: string): Promise<UserWithID | undefined> {
     const userModel = await UserModel.findOne({ username: username }).exec()
 

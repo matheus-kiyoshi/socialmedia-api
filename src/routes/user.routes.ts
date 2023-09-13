@@ -56,6 +56,11 @@ class UserRoutes {
       '/users/:username/followers',
       this.userController.findAllFollowers.bind(this.userController)
     )
+    this.router.post(
+      '/users/:username/unfollow',
+      checkToken,
+      this.userController.unfollowUser.bind(this.userController)
+    )
   }
 }
 

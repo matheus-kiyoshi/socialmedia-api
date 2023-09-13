@@ -181,6 +181,7 @@ class UserUseCases {
       throw new HttpException('You cannot follow yourself', 400) 
     }
 
+    // verify if user exists
     let user = await this.userRepository.findByUsername(username)
     if (!user) {
       throw new HttpException('User not found', 404)
@@ -197,6 +198,37 @@ class UserUseCases {
     }
 
     const result = await this.userRepository.updateUserFollows(user, userFollow)
+    return result
+  }
+
+  async unfollowUser(username: string, userToUnfollow: string) {
+    if (!username) {
+      throw new HttpException('Username is required', 400) 
+    }
+    if (!userToUnfollow) {
+      throw new HttpException('User to unfollow is required', 400) 
+    }
+    if (username === userToUnfollow) {
+      throw new HttpException('You cannot unfollow yourself', 400) 
+    }
+
+    // verify if user exists
+    let user = await this.userRepository.findByUsername(username)
+    if (!user) {
+      throw new HttpException('User not found', 404)
+    }
+
+    let userUnfollow = await this.userRepository.findByUsername(userToUnfollow)
+    if (!userUnfollow) {
+      throw new HttpException('User not found', 404)
+    }
+
+    // verify if user is already unfollowed
+    if (!user.following?.includes(userUnfollow._id)) {
+      throw new HttpException('You are not following this user', 409)
+    }
+
+    const result = await this.userRepository.unfollowUser(user, userUnfollow)
     return result
   }
 

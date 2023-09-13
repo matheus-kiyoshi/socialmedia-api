@@ -87,6 +87,18 @@ class UserController {
     }
   }
 
+  async unfollowUser(req: Request, res: Response, next: NextFunction) {
+    const { username } = req.params
+    const { userToUnfollow } = req.body
+
+    try {
+      await this.userUseCase.unfollowUser(username, userToUnfollow)
+      return res.status(200).json({ message: `Now you are not following ${userToUnfollow}` })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async findByUsername(req: Request, res: Response, next: NextFunction) {
     const { username } = req.body
 

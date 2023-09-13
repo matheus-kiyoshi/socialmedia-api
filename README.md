@@ -20,8 +20,8 @@
     - DONE
   - `/api/users/:username/followers` (GET) => Get all user followers data
     - DONE
-  - `/api/users/:username/unfollow` (POST) => Follow other user
-    - TODO
+  - `/api/users/:username/unfollow` (POST) => Unfollow other user
+    - DONE
   - `/api/users/:username/block` (POST): Block other user
     - TODO
   - `/api/users/:username/report` (POST): Report other user

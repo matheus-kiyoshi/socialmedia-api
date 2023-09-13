@@ -76,4 +76,20 @@ describe('User Controller', () => {
       message: 'Now you are following teste4'
     })
   })
+  it('should unfollow a user', async () => {
+    // need jwt
+    const response = await request(express)
+      .post('/api/users/teste2/unfollow')
+      .send({
+        userToUnfollow: 'teste4'
+      })
+
+    if (response.error) {
+      console.log('error -==>', response.error)
+    }
+    expect(response.status).toBe(200)
+    expect(response.body).toEqual({
+      message: 'Now you are not following teste4'
+    })
+  })
 })
