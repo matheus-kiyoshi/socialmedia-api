@@ -170,6 +170,36 @@ class UserUseCases {
     return updateProfile
   }
 
+  async followUser(username: string, userToFollow: string) {
+    if (!username) {
+      throw new HttpException('Username is required', 400) 
+    }
+    if (!userToFollow) {
+      throw new HttpException('User to follow is required', 400) 
+    }
+    if (username === userToFollow) {
+      throw new HttpException('You cannot follow yourself', 400) 
+    }
+
+    let user = await this.userRepository.findByUsername(username)
+    if (!user) {
+      throw new HttpException('User not found', 404)
+    }
+
+    let userFollow = await this.userRepository.findByUsername(userToFollow)
+    if (!userFollow) {
+      throw new HttpException('User not found', 404)
+    }
+
+    // verify if user is already following
+    if (user.following?.includes(userFollow._id)) {
+      throw new HttpException('User is already following', 409)
+    }
+
+    const result = await this.userRepository.updateUserFollows(user, userFollow)
+    return result
+  }
+
   async findByUsername(username: string) {
     if (!username) {
       throw new HttpException('Username is required', 404)

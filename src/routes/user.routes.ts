@@ -47,6 +47,10 @@ class UserRoutes {
       checkToken,
       this.userController.deleteUser.bind(this.userController)
     )
+    this.router.post(
+      '/users/:username/follow',
+      this.userController.followUser.bind(this.userController)
+    )
   }
 }
 

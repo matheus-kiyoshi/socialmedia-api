@@ -52,14 +52,32 @@ class UserRepositoryMongoose implements UserRepository {
     const userModel = await UserModel.findByIdAndUpdate(
       user._id,
       { 
-        icon: user.icon,
-        bio: user.bio,
-        nickname: user.nickname 
+        $set: {
+          icon: user.icon,
+          bio: user.bio,
+          nickname: user.nickname 
+        }
       },
       { new: true }
     ).select('-password -__v -_id')
 
     return userModel ? userModel.toObject() : undefined
+  }
+
+  async updateUserFollows(user: UserWithID, user2: UserWithID): Promise<string> {
+    const userModel = await UserModel.findByIdAndUpdate(
+      user._id,
+      { $push: { following: user2._id } },
+      { new: true }
+    )
+
+    const userModel2 = await UserModel.findByIdAndUpdate(
+      user2._id,
+      { $push: { followers: user._id } },
+      { new: true }
+    )
+
+    return 'Followed'
   }
 
   async findByUsername(username: string): Promise<UserWithID | undefined> {

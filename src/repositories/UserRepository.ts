@@ -18,6 +18,7 @@ interface UserRepository {
   updatePassword(user: UserWithID): Promise<UserWithID | undefined>
   deleteUser(id: string): Promise<unknown>
   updateProfile(user: UserWithID): Promise<PublicUser | undefined>
+  updateUserFollows(user: UserWithID, user2: UserWithID): Promise<string>
   findByUsername(username: string): Promise<UserWithID | undefined>
   findUser(username: string): Promise<PublicUser | undefined>
 }

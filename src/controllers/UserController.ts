@@ -75,6 +75,18 @@ class UserController {
     }
   }
 
+  async followUser(req: Request, res: Response, next: NextFunction) {
+    const { username } = req.params
+    const { userToFollow } = req.body
+   
+    try {
+      await this.userUseCase.followUser(username, userToFollow)
+      return res.status(200).json({ message: `Now you are following ${userToFollow}` })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async findByUsername(req: Request, res: Response, next: NextFunction) {
     const { username } = req.body
 

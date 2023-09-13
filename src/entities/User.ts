@@ -2,8 +2,8 @@ class User {
   constructor(
     public username: string,
     public password: string,
-    public followers?: User[],
-    public following?: User[],
+    public followers?: string[],
+    public following?: string[],
     public postsCount?: number,
     public nickname?: string,
     public bio?: string,
