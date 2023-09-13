@@ -7,6 +7,7 @@ class User {
     public postsCount?: number,
     public nickname?: string,
     public bio?: string,
+    public usersBlocked?: string[],
     public icon?: string
   ) {}
 }

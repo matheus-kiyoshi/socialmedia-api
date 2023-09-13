@@ -39,6 +39,7 @@ class UserUseCases {
     user.followers = []
     user.postsCount = 0    
     user.bio = ''
+    user.usersBlocked = []
     
     const defaultIcon = resolve(__dirname, '../../public/default-icon.jpg')
     user.icon = this.imageToBase64(defaultIcon)
@@ -229,6 +230,37 @@ class UserUseCases {
     }
 
     const result = await this.userRepository.unfollowUser(user, userUnfollow)
+    return result
+  }
+
+  async blockUser(username: string, userToBlock: string) {
+    if (!username) {
+      throw new HttpException('Username is required', 400) 
+    }
+    if (!userToBlock) {
+      throw new HttpException('User to block is required', 400) 
+    }
+    if (username === userToBlock) {
+      throw new HttpException('You cannot block yourself', 400) 
+    }
+
+    // verify if user exists
+    let user = await this.userRepository.findByUsername(username)
+    if (!user) {
+      throw new HttpException('User not found', 404)
+    }
+
+    let userBlock = await this.userRepository.findByUsername(userToBlock)
+    if (!userBlock) {
+      throw new HttpException('User not found', 404)
+    }
+
+    // verify if user is already blocked
+    if (user.usersBlocked?.includes(userBlock._id)) {
+      throw new HttpException('User is already blocked', 409)
+    }
+
+    const result = await this.userRepository.updateUserBlocks(user, userBlock)
     return result
   }
 

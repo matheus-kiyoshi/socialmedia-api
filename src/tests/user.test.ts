@@ -3,7 +3,6 @@
 //               you need to go to the user.routes.ts and remove the checkToken
 */   
 
-
 import { App } from '../app'
 import User from '../entities/User'
 import request from 'supertest'

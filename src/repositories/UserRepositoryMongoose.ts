@@ -20,7 +20,11 @@ const UserModel = mongoose.model('User', new mongoose.Schema({
     type: Array,
     ref: 'User'
   },
-  postsCount: Number
+  postsCount: Number,
+  usersBlocked: {
+    type: Array,
+    ref: 'User'
+  }
 }))
 
 class UserRepositoryMongoose implements UserRepository {
@@ -93,6 +97,16 @@ class UserRepositoryMongoose implements UserRepository {
     )
     
     return 'Unfollowed'
+  }
+
+  async updateUserBlocks(user: UserWithID, user2: UserWithID): Promise<string> {
+    const userModel = await UserModel.findByIdAndUpdate(
+      user._id,
+      { $push: { usersBlocked: user2._id } },
+      { new: true }
+    )
+
+    return 'Blocked'
   }
 
   async findByUsername(username: string): Promise<UserWithID | undefined> {

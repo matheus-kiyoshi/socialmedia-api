@@ -28,6 +28,7 @@ interface UserRepository {
   updateProfile(user: UserWithID): Promise<PublicUser | undefined>
   updateUserFollows(user: UserWithID, user2: UserWithID): Promise<string>
   unfollowUser(user: UserWithID, user2: UserWithID): Promise<string>
+  updateUserBlocks(user: UserWithID, user2: UserWithID): Promise<string>
   findByUsername(username: string): Promise<UserWithID | undefined>
   findUser(username: string): Promise<PublicUser | undefined>
   findById(id: string): Promise<UserWithID | undefined>

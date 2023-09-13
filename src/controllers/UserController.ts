@@ -99,6 +99,18 @@ class UserController {
     }
   }
 
+  async blockUser(req: Request, res: Response, next: NextFunction) {
+    const { username } = req.params
+    const { userToBlock } = req.body
+
+    try {
+      await this.userUseCase.blockUser(username, userToBlock)
+      return res.status(200).json({ message: `You have blocked ${userToBlock}` })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async findByUsername(req: Request, res: Response, next: NextFunction) {
     const { username } = req.body
 

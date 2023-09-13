@@ -61,6 +61,11 @@ class UserRoutes {
       checkToken,
       this.userController.unfollowUser.bind(this.userController)
     )
+    this.router.post(
+      '/users/:username/block',
+      checkToken,
+      this.userController.blockUser.bind(this.userController)
+    )
   }
 }
 
