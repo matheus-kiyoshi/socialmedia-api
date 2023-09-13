@@ -1,3 +1,9 @@
+/* 
+//   REMEMBER => if you are running the tests and got the unauthorized error, 
+//               you need to go to the user.routes.ts and remove the checkToken
+*/   
+
+
 import { App } from '../app'
 import User from '../entities/User'
 import request from 'supertest'
@@ -32,6 +38,7 @@ describe('User Controller', () => {
       .expect(401)
   })
   it('should find a user', async () => {
+    // need jwt
     await request(express)
       .get('/api/users/loginteste')
       .expect(200)
@@ -40,5 +47,33 @@ describe('User Controller', () => {
     await request(express)
       .get('/api/users/0')
       .expect(404)
+  })
+  it('should update a user', async () => {
+    // need jwt
+    await request(express)
+      .patch('/api/users/loginteste/profile')
+      .send({ nickname: 'loginteste', bio: 'loginteste' }) // icon is optional
+      .expect(200)
+  })
+  it('should find all followers', async () => {
+    await request(express)
+      .get('/api/users/teste/followers')
+      .expect(200)
+  })
+  it('should follow a user', async () => {
+    // need jwt
+    const response = await request(express)
+      .post('/api/users/teste2/follow')
+      .send({
+        userToFollow: 'teste4'
+      })
+
+    if (response.error) {
+      console.log('error -==>', response.error)
+    }
+    expect(response.status).toBe(200)
+    expect(response.body).toEqual({
+      message: 'Now you are following teste4'
+    })
   })
 })

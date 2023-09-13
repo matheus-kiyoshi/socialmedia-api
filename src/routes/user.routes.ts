@@ -49,7 +49,12 @@ class UserRoutes {
     )
     this.router.post(
       '/users/:username/follow',
+      checkToken,
       this.userController.followUser.bind(this.userController)
+    )
+    this.router.get(
+      '/users/:username/followers',
+      this.userController.findAllFollowers.bind(this.userController)
     )
   }
 }

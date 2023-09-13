@@ -99,11 +99,39 @@ class UserController {
     }
   }
 
+  async findById(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params
+
+    try {
+      const user = await this.userUseCase.findById(id)
+
+      return user
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async findUser(req: Request, res: Response, next: NextFunction) {
     const { username } = req.params
 
     try {
       const user = await this.userUseCase.findUser(username)
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' })
+      }
+
+      return res.status(200).json(user)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async findAllFollowers(req: Request, res: Response, next: NextFunction) {
+    const { username } = req.params
+    const { skip } = req.body
+
+    try {
+      const user = await this.userUseCase.findAllFollowers(username, skip)
       if (!user) {
         return res.status(404).json({ message: 'User not found' })
       }

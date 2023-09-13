@@ -218,6 +218,27 @@ class UserUseCases {
     return user
   }
 
+  async findById(id: string) {
+    if (!id) {
+      throw new HttpException('User id is required', 404)
+    }
+
+    const user = await this.userRepository.findById(id)
+    return user
+  }
+
+  async findAllFollowers(username: string, skip?: number) {
+    if (!username) {
+      throw new HttpException('Username is required', 404)
+    }
+    if (!skip) {
+      skip = 0
+    }
+
+    const user = await this.userRepository.findAllFollowers(username, skip)
+    return user
+  }
+
   imageToBase64(filePath: string): string {
     const imageData = fs.readFileSync(filePath)
     const mimeType = mime.getType(filePath)

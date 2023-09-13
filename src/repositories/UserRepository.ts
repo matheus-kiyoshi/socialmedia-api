@@ -8,9 +8,17 @@ export interface PublicUser {
   nickname: string
   username: string
   icon: string
-  followers: number
-  following: number
-  postsCount: number
+  bio: string
+  followers?: number
+  following?: number
+  postsCount?: number
+}
+
+export interface PublicUserCard {
+  username?: string
+  nickname?: string
+  icon?: string
+  bio?: string
 }
 
 interface UserRepository {
@@ -21,6 +29,8 @@ interface UserRepository {
   updateUserFollows(user: UserWithID, user2: UserWithID): Promise<string>
   findByUsername(username: string): Promise<UserWithID | undefined>
   findUser(username: string): Promise<PublicUser | undefined>
+  findById(id: string): Promise<UserWithID | undefined>
+  findAllFollowers(username: string, skip: number): Promise<PublicUserCard[] | undefined>
 }
 
 export { UserRepository }

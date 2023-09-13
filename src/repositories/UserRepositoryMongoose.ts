@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { PublicUser, UserRepository, UserWithID } from './UserRepository'
+import { PublicUser, PublicUserCard, UserRepository, UserWithID } from './UserRepository'
 import User from '../entities/User'
 
 const UserModel = mongoose.model('User', new mongoose.Schema({
@@ -90,6 +90,23 @@ class UserRepositoryMongoose implements UserRepository {
     const userModel = await UserModel.findOne({ username: username }).select('-password -__v -_id').exec()
 
     return userModel ? userModel.toObject() : undefined
+  }
+
+  async findById(id: string): Promise<UserWithID | undefined> {
+    const userModel = await UserModel.findById(id).select('-password -__v').exec()
+
+    return userModel ? userModel.toObject() : undefined
+  }
+
+  async findAllFollowers(username: string, skip: number): Promise<PublicUserCard[] | undefined> {
+    const userModel = await UserModel.findOne({ username: username }).select('followers').exec()
+
+    if (!userModel) {
+      return
+    }
+    const followers: PublicUserCard[] = await UserModel.find({ _id: { $in: userModel.followers } }).select('-_id username nickname icon bio').skip(skip).limit(20).exec()
+
+    return followers
   }
 }
 
