@@ -19,6 +19,7 @@ export interface PublicUserCard {
   nickname?: string
   icon?: string
   bio?: string
+  isBlocked?: boolean
 }
 
 interface UserRepository {
@@ -32,6 +33,7 @@ interface UserRepository {
   findByUsername(username: string): Promise<UserWithID | undefined>
   findUser(username: string): Promise<PublicUser | undefined>
   findById(id: string): Promise<UserWithID | undefined>
+  findBlockedUsers(username: string, skip: number): Promise<PublicUserCard[] | undefined>
   findAllFollowers(username: string, skip: number): Promise<PublicUserCard[] | undefined>
 }
 

@@ -24,6 +24,10 @@ const UserModel = mongoose.model('User', new mongoose.Schema({
   usersBlocked: {
     type: Array,
     ref: 'User'
+  },
+  isBlocked: {
+    type: Boolean,
+    default: false
   }
 }))
 
@@ -127,13 +131,23 @@ class UserRepositoryMongoose implements UserRepository {
     return userModel ? userModel.toObject() : undefined
   }
 
-  async findAllFollowers(username: string, skip: number): Promise<PublicUserCard[] | undefined> {
-    const userModel = await UserModel.findOne({ username: username }).select('followers').exec()
-
+  async findBlockedUsers(username: string, skip: number): Promise<PublicUserCard[] | undefined> {
+    const userModel = await UserModel.findOne({ username: username }).select('usersBlocked').exec()
     if (!userModel) {
       return
     }
-    const followers: PublicUserCard[] = await UserModel.find({ _id: { $in: userModel.followers } }).select('-_id username nickname icon bio').skip(skip).limit(20).exec()
+    
+    const usersBlocked: PublicUserCard[] = await UserModel.find({ _id: { $in: userModel.usersBlocked } }).select('-_id username nickname icon bio').skip(skip).exec()
+    return usersBlocked
+  }
+
+  async findAllFollowers(username: string, skip: number): Promise<PublicUserCard[] | undefined> {
+    const userModel = await UserModel.findOne({ username: username }).select('followers').exec()
+    if (!userModel) {
+      return
+    }
+
+    const followers: PublicUserCard[] = await UserModel.find({ _id: { $in: userModel.followers } }).select('-_id username nickname icon bio isBlocked').skip(skip).limit(20).exec()
 
     return followers
   }

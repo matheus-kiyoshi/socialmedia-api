@@ -54,6 +54,25 @@ describe('User Controller', () => {
       .send({ nickname: 'loginteste', bio: 'loginteste' }) // icon is optional
       .expect(200)
   })
+  it('should block a user', async () => {
+    // need jwt
+    await request(express)
+      .post('/api/users/loginteste/block')
+      .send({ userToBlock: 'loginteste2' })
+      .expect(200)
+  })
+  it('should unblock a user', async () => {
+    // need jwt
+    await request(express)
+      .post('/api/users/loginteste/unblock')
+      .send({ userToUnblock: 'loginteste2' })
+      .expect(200)
+  })
+  it('should find blocked users', async () => {
+    await request(express)
+      .get('/api/users/loginteste/block')
+      .expect(200)
+  })
   it('should find all followers', async () => {
     await request(express)
       .get('/api/users/teste/followers')

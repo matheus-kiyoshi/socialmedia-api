@@ -23,9 +23,11 @@
   - `/api/users/:username/unfollow` (POST) => Unfollow other user
     - DONE
   - `/api/users/:username/block` (POST): Block other user
-    - DONE --> TODO: Update other cases to verify if user is blocked (if true -> not send data of the blocked user)
+    - DONE
   - `/api/users/:username/block` (GET) => Get user blocked
-    - TODO
+    - DONE
+  - `/api/users/:username/unblock` (POST) => Unblock User
+    - DOING
   - `/api/users/:username/report` (POST): Report other user
     - TODO
 

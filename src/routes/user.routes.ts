@@ -66,6 +66,11 @@ class UserRoutes {
       checkToken,
       this.userController.blockUser.bind(this.userController)
     )
+    this.router.get(
+      '/users/:username/block',
+      checkToken,
+      this.userController.findBlockedUsers.bind(this.userController)
+    )
   }
 }
 

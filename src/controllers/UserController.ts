@@ -111,6 +111,18 @@ class UserController {
     }
   }
 
+  async findBlockedUsers(req: Request, res: Response, next: NextFunction) {
+    const { username } = req.params
+    const { skip } = req.body
+
+    try {
+      const users = await this.userUseCase.findBlockedUsers(username, skip)
+      return res.status(200).json(users)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async findByUsername(req: Request, res: Response, next: NextFunction) {
     const { username } = req.body
 
@@ -152,15 +164,15 @@ class UserController {
 
   async findAllFollowers(req: Request, res: Response, next: NextFunction) {
     const { username } = req.params
-    const { skip } = req.body
+    const { user, skip } = req.body
 
     try {
-      const user = await this.userUseCase.findAllFollowers(username, skip)
-      if (!user) {
+      const users = await this.userUseCase.findAllFollowers(username, user, skip)
+      if (!users) {
         return res.status(404).json({ message: 'User not found' })
       }
 
-      return res.status(200).json(user)
+      return res.status(200).json(users)
     } catch (error) {
       next(error)
     }

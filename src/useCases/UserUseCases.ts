@@ -193,6 +193,14 @@ class UserUseCases {
       throw new HttpException('User not found', 404)
     }
 
+    if (user.usersBlocked?.includes(userFollow._id)) {
+      throw new HttpException('You cannot follow blocked users', 400)
+    }
+
+    if (userFollow.usersBlocked?.includes(user._id)) {
+      throw new HttpException('The user blocked you', 400)
+    }
+
     // verify if user is already following
     if (user.following?.includes(userFollow._id)) {
       throw new HttpException('User is already following', 409)
@@ -264,6 +272,18 @@ class UserUseCases {
     return result
   }
 
+  async findBlockedUsers(username: string, skip: number) {
+    if (!username) {
+      throw new HttpException('Username is required', 404)
+    }
+    if (!skip) {
+      skip = 0
+    }
+
+    const users = await this.userRepository.findBlockedUsers(username, skip)
+    return users
+  }
+
   async findByUsername(username: string) {
     if (!username) {
       throw new HttpException('Username is required', 404)
@@ -291,16 +311,28 @@ class UserUseCases {
     return user
   }
 
-  async findAllFollowers(username: string, skip?: number) {
+  async findAllFollowers(username: string, user: string, skip?: number) {
     if (!username) {
       throw new HttpException('Username is required', 404)
+    }
+    if (!user) {
+      throw new HttpException('User is required', 404)
     }
     if (!skip) {
       skip = 0
     }
 
-    const user = await this.userRepository.findAllFollowers(username, skip)
-    return user
+    let users = await this.userRepository.findAllFollowers(username, skip)
+    const blockedUsers = await this.userRepository.findBlockedUsers(user, 0)
+    
+    if (users && blockedUsers) {
+      users.forEach(user => {
+        if (blockedUsers.some(blockedUser => blockedUser.username === user.username)) {
+          user.isBlocked = true
+      }})
+    }
+
+    return users
   }
 
   imageToBase64(filePath: string): string {
