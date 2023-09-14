@@ -56,7 +56,7 @@ class UserRoutes {
       '/users/:username/followers',
       this.userController.findAllFollowers.bind(this.userController)
     )
-    this.router.post(
+    this.router.delete(
       '/users/:username/unfollow',
       checkToken,
       this.userController.unfollowUser.bind(this.userController)
@@ -70,6 +70,11 @@ class UserRoutes {
       '/users/:username/block',
       checkToken,
       this.userController.findBlockedUsers.bind(this.userController)
+    )
+    this.router.delete(
+      '/users/:username/unblock',
+      checkToken,
+      this.userController.unblockUser.bind(this.userController)
     )
   }
 }

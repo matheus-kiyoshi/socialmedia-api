@@ -20,14 +20,14 @@
     - DONE
   - `/api/users/:username/followers` (GET) => Get all user followers data
     - DONE
-  - `/api/users/:username/unfollow` (POST) => Unfollow other user
+  - `/api/users/:username/unfollow` (DELETE) => Unfollow other user
     - DONE
   - `/api/users/:username/block` (POST): Block other user
     - DONE
   - `/api/users/:username/block` (GET) => Get user blocked
     - DONE
-  - `/api/users/:username/unblock` (POST) => Unblock User
-    - DOING
+  - `/api/users/:username/unblock` (DELETE) => Unblock User
+    - DONE
   - `/api/users/:username/report` (POST): Report other user
     - TODO
 

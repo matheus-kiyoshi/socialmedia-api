@@ -113,6 +113,21 @@ class UserRepositoryMongoose implements UserRepository {
     return 'Blocked'
   }
 
+  async unblockUser(user: UserWithID, user2: UserWithID): Promise<string> {
+    const userModel = await UserModel.findByIdAndUpdate(
+      user._id,
+      { $pull: { usersBlocked: user2._id } },
+      { new: true }
+    )
+    const userModel2 = await UserModel.findByIdAndUpdate(
+      user2._id,
+      { $pull: { usersBlocked: user._id } },
+      { new: true }
+    )
+
+    return 'Unblocked'
+  }
+
   async findByUsername(username: string): Promise<UserWithID | undefined> {
     const userModel = await UserModel.findOne({ username: username }).exec()
 

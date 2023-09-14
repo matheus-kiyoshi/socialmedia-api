@@ -111,6 +111,18 @@ class UserController {
     }
   }
 
+  async unblockUser(req: Request, res: Response, next: NextFunction) {
+    const { username } = req.params
+    const { userToUnblock } = req.body
+
+    try {
+      await this.userUseCase.unblockUser(username, userToUnblock)
+      return res.status(200).json({ message: `You have unblocked ${userToUnblock}` })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async findBlockedUsers(req: Request, res: Response, next: NextFunction) {
     const { username } = req.params
     const { skip } = req.body

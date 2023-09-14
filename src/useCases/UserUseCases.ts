@@ -272,6 +272,37 @@ class UserUseCases {
     return result
   }
 
+  async unblockUser(username: string, userToUnblock: string) {
+    if (!username) {
+      throw new HttpException('Username is required', 400) 
+    }
+    if (!userToUnblock) {
+      throw new HttpException('User to unblock is required', 400) 
+    }
+    if (username === userToUnblock) {
+      throw new HttpException('You cannot unblock yourself', 400) 
+    }
+
+    // verify if user exists
+    let user = await this.userRepository.findByUsername(username)
+    if (!user) {
+      throw new HttpException('User not found', 404)
+    }
+
+    let userUnblock = await this.userRepository.findByUsername(userToUnblock)
+    if (!userUnblock) {
+      throw new HttpException('User not found', 404)
+    }
+
+    // verify if user is already unblocked
+    if (!user.usersBlocked?.includes(userUnblock._id)) {
+      throw new HttpException('User is not blocked', 409)
+    }
+
+    const result = await this.userRepository.unblockUser(user, userUnblock)
+    return result
+  }
+
   async findBlockedUsers(username: string, skip: number) {
     if (!username) {
       throw new HttpException('Username is required', 404)
