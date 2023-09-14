@@ -76,6 +76,11 @@ class UserRoutes {
       checkToken,
       this.userController.unblockUser.bind(this.userController)
     )
+    this.router.post(
+      '/users/:username/report',
+      checkToken,
+      this.userController.reportUser.bind(this.userController)
+    )
   }
 }
 

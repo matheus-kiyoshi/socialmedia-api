@@ -2,7 +2,8 @@
 
   - WORK IN PROGRESS
 
-# User
+# USER
+  - DONE
 
   - `/api/register` (POST) => Create user
     - DONE
@@ -29,7 +30,7 @@
   - `/api/users/:username/unblock` (DELETE) => Unblock User
     - DONE
   - `/api/users/:username/report` (POST): Report other user
-    - TODO
+    - DONE
 
 # POST
 

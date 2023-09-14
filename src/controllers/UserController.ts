@@ -189,6 +189,18 @@ class UserController {
       next(error)
     }
   }
+
+  async reportUser(req: Request, res: Response, next: NextFunction) {
+    const { username } = req.params
+    const { userToReport, reason } = req.body
+
+    try {
+      await this.userUseCase.reportUser(username, userToReport, reason)
+      return res.status(200).json({ message: 'User reported' })
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export { UserController }

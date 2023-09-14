@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config'
 import { resolve } from 'path'
-
+import nodemailer from 'nodemailer'
 
 class UserUseCases {
   constructor(private userRepository: UserRepository) {}
@@ -364,6 +364,45 @@ class UserUseCases {
     }
 
     return users
+  }
+
+  async reportUser(username: string, userToReport: string, reason: string) {
+    if (!username) {
+      throw new HttpException('Username is required', 404)
+    }
+    if (!userToReport) {
+      throw new HttpException('User to report is required', 404)
+    }
+    if (!reason) {
+      throw new HttpException('Reason is required', 404)
+    }
+
+    try {
+      const transporter = nodemailer.createTransport({
+        service: 'Outlook',
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      })
+  
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: process.env.EMAIL_RECEIVER,
+        subject: `Report user - ${username}`,
+        text: reason,
+      }
+      
+      return transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error('Error', error)
+        } else {
+          console.log('Email sent', info.response)
+        }
+      })
+    } catch (error) {
+      throw new HttpException('Internal server error', 500)
+    }
   }
 
   imageToBase64(filePath: string): string {
