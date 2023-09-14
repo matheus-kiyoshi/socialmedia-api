@@ -64,7 +64,7 @@ class UserController {
     let icon
 
     if (file) {
-      icon = file.filename  
+      icon = file.filename
     }
 
     try {

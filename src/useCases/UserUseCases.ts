@@ -163,9 +163,7 @@ class UserUseCases {
 
     user.nickname = nickname
     user.bio = bio
-    if (icon) {
-      user.icon = this.imageToBase64(resolve(__dirname, `../tmp/uploads/${icon}`))
-    }
+    user.icon = icon
 
     const updateProfile = await this.userRepository.updateProfile(user)
     return updateProfile

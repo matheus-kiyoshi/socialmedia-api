@@ -29,6 +29,10 @@
         "semi": [
             "error",
             "never"
+        ],
+        "tabs": [
+            "error",
+            "tab"
         ]
     }
 }

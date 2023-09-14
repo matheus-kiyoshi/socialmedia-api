@@ -1,12 +1,12 @@
 class Post {
   constructor(
+    public authorID: string,
     public content: string,
-    public images: string[],
-    public authorId: string,
-    public date: Date,
-    public coments: Post[],
-    public likes: number,
-    public reposts: number
+    public date?: Date,
+    public coments?: Post[],
+    public likes?: string[],
+    public reposts?: string[],
+    public media?: string[]
   ) {}
 }
 
