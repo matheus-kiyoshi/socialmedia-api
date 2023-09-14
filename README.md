@@ -9,6 +9,8 @@
     - DONE
   - `/api/login` (POST) => Sign-in user
     - DONE
+  - `/api/users` (GET) => Get all users
+    - DONE
   - `/api/users/:username` (GET) => Get User Public Data
     - DONE
   - `/api/users/:username/password` (PATCH) => (need jwt) Update user password

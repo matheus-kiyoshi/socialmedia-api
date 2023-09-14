@@ -366,6 +366,35 @@ class UserUseCases {
     return users
   }
 
+  async findAllFollowing(username: string, user: string, skip?: number) {
+    if (!username) {
+      throw new HttpException('Username is required', 404)
+    }
+    if (!user) {
+      throw new HttpException('User is required', 404)
+    }
+    if (!skip) {
+      skip = 0
+    }
+
+    let users = await this.userRepository.findAllFollowing(username, skip)
+    const blockedUsers = await this.userRepository.findBlockedUsers(user, 0)
+
+    if (users && blockedUsers) {
+      users.forEach(user => {
+        if (blockedUsers.some(blockedUser => blockedUser.username === user.username)) {
+          user.isBlocked = true
+      }})
+    }
+
+    return users
+  }
+
+  async findAll() {
+    const users = await this.userRepository.findAll()
+    return users
+  }
+
   async reportUser(username: string, userToReport: string, reason: string) {
     if (!username) {
       throw new HttpException('Username is required', 404)

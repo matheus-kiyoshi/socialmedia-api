@@ -190,6 +190,31 @@ class UserController {
     }
   }
 
+  async findAllFollowing(req: Request, res: Response, next: NextFunction) {
+    const { username } = req.params
+    const { user, skip } = req.body
+
+    try {
+      const users = await this.userUseCase.findAllFollowing(username, user, skip)
+      if (!users) {
+        return res.status(404).json({ message: 'User not found' })
+      } 
+
+      return res.status(200).json(users)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async findAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const users = await this.userUseCase.findAll()
+      return res.status(200).json(users)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async reportUser(req: Request, res: Response, next: NextFunction) {
     const { username } = req.params
     const { userToReport, reason } = req.body

@@ -163,8 +163,22 @@ class UserRepositoryMongoose implements UserRepository {
     }
 
     const followers: PublicUserCard[] = await UserModel.find({ _id: { $in: userModel.followers } }).select('-_id username nickname icon bio isBlocked').skip(skip).limit(20).exec()
-
     return followers
+  }
+
+  async findAllFollowing(username: string, skip: number): Promise<PublicUserCard[] | undefined> {
+    const userModel = await UserModel.findOne({ username: username }).select('following').exec()
+    if (!userModel) {
+      return
+    }
+
+    const following: PublicUserCard[] = await UserModel.find({ _id: { $in: userModel.following } }).select('-_id username nickname icon bio isBlocked').skip(skip).limit(20).exec()
+    return following
+  }
+
+  async findAll(): Promise<UserWithID[] | undefined> {
+    const userModel = await UserModel.find().select('-password -__v').exec()
+    return userModel ? userModel.map(user => user.toObject()) : undefined
   }
 }
 

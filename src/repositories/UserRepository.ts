@@ -36,6 +36,8 @@ interface UserRepository {
   findById(id: string): Promise<UserWithID | undefined>
   findBlockedUsers(username: string, skip: number): Promise<PublicUserCard[] | undefined>
   findAllFollowers(username: string, skip: number): Promise<PublicUserCard[] | undefined>
+  findAllFollowing(username: string, skip: number): Promise<PublicUserCard[] | undefined>
+  findAll(): Promise<UserWithID[] | undefined>
 }
 
 export { UserRepository }

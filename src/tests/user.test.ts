@@ -110,4 +110,9 @@ describe('User Controller', () => {
       message: 'Now you are not following teste4'
     })
   })
+  it('should find all following', async () => {
+    await request(express)
+      .get('/api/users/teste/following')
+      .expect(200)
+  })
 })

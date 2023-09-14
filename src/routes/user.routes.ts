@@ -28,6 +28,10 @@ class UserRoutes {
       this.userController.login.bind(this.userController)
     )
     this.router.get(
+      '/users',
+      this.userController.findAll.bind(this.userController)
+    )
+    this.router.get(
       '/users/:username',
       this.userController.findUser.bind(this.userController)
     )
@@ -55,6 +59,10 @@ class UserRoutes {
     this.router.get(
       '/users/:username/followers',
       this.userController.findAllFollowers.bind(this.userController)
+    )
+    this.router.get(
+      '/users/:username/following',
+      this.userController.findAllFollowing.bind(this.userController)
     )
     this.router.delete(
       '/users/:username/unfollow',
