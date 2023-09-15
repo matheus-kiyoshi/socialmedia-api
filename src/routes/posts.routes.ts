@@ -31,6 +31,10 @@ class PostRoutes {
 			'/posts',
 			this.postController.findAllPosts.bind(this.postController)
 		)
+		this.router.get(
+			'/posts/:id',
+			this.postController.findPostById.bind(this.postController)
+		)
 	}
 }
 

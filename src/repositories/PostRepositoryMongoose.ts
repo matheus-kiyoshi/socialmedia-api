@@ -40,6 +40,12 @@ class PostRepositoryMongoose implements PostRepository {
     return postModel
   }
 
+  async findPostById(id: string): Promise<PostWithID | undefined> {
+    const post = await PostModel.findById(id).select('-__v').exec()
+
+    return post ? post.toObject() : undefined
+  }
+
   async findAllPosts(skip: number): Promise<PostWithID[] | undefined> {
     const posts = await PostModel.find().select('-__v').skip(skip).limit(20).exec()
 

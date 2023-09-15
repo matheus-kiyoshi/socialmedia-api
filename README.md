@@ -41,7 +41,7 @@
   - `/api/posts` (GET) => Get posts (limit of posts received)
     - DONE
   - `/api/posts/:postID` (GET) => Get specific post
-    - TODO
+    - DOING
   - `/api/posts/:postID` (PATCH) => (need jwt) Edit post
     - TODO
   - `/api/posts/:postID` (DELETE) => (need jwt) Delete post

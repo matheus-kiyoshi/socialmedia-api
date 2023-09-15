@@ -6,6 +6,7 @@ export interface PostWithID extends Post {
 
 interface PostRepository {
   createPost(post: Post): Promise<unknown>
+  findPostById(id: string): Promise<PostWithID | undefined>
   findAllPosts(skip: number): Promise<PostWithID[] | undefined>
 }
 

@@ -22,6 +22,21 @@ class postController {
     }
   }
 
+  async findPostById(req: Request, res: Response, next: NextFunction) {
+    const id = req.params.id
+    
+    try {
+      const post = await this.postUseCases.findPostById(id)
+      if (!post) {
+        return res.status(404).json({ message: 'Post not found' })
+      }
+      
+      return res.status(200).json(post)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async findAllPosts(req: Request, res: Response, next: NextFunction) {
     const skip = req.query.skip as string | undefined
 

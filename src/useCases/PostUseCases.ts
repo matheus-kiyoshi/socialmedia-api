@@ -33,6 +33,11 @@ class PostUseCases {
     return result
   }
 
+  async findPostById(id: string) {
+    const post = await this.postRepository.findPostById(id)
+    return post
+  }
+
   async findAllPosts(skipParam?: string) {
     const skip = skipParam ? parseInt(skipParam, 10) : 0
 
