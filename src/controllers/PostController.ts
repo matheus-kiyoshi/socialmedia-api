@@ -42,6 +42,18 @@ class postController {
     }
   }
 
+  async deletePost(req: Request, res: Response, next: NextFunction) {
+    const id = req.params.id
+    const { authorID } = req.body
+
+    try {
+      await this.postUseCases.deletePost(id, authorID)
+      return res.status(200).json({ message: 'Post deleted' })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async findPostById(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id
     

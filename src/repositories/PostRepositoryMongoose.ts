@@ -60,6 +60,15 @@ class PostRepositoryMongoose implements PostRepository {
     return postModel ? postModel.toObject() : undefined
   }
 
+  async deletePost(id: string): Promise<string> {
+    try {
+      await PostModel.findByIdAndDelete(id).exec()
+      return 'Post deleted'
+    } catch (error) {
+      throw error
+    }
+  }
+
   async findPostById(id: string): Promise<PostWithID | undefined> {
     const post = await PostModel.findById(id).select('-__v').exec()
 

@@ -41,6 +41,11 @@ class PostRoutes {
 			upload.array('media', 4),
 			this.postController.updatePost.bind(this.postController)
 		)
+		this.router.delete(
+			'/posts/:id',
+			checkToken,
+			this.postController.deletePost.bind(this.postController)
+		)
 	}
 }
 

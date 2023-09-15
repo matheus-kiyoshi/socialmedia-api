@@ -56,6 +56,26 @@ class PostUseCases {
     return result
   }
 
+  async deletePost(id: string, authorID: string) {
+    if (!id) {
+      throw new HttpException('Post id is required', 400)
+    }
+    if (!authorID) {
+      throw new HttpException('Author id is required', 400)
+    }
+
+    const post = await this.postRepository.findPostById(id)
+    if (!post) {
+      throw new HttpException('Post not found', 404)
+    }
+    if (post?.authorID.toString() !== authorID) {
+      throw new HttpException('You cannot delete this post', 403)
+    }
+
+    await this.postRepository.deletePost(id)
+    return 'Post deleted'
+  }
+
   async findPostById(id: string) {
     const post = await this.postRepository.findPostById(id)
     return post
