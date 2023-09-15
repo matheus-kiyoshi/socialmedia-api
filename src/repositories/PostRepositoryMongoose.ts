@@ -69,6 +69,20 @@ class PostRepositoryMongoose implements PostRepository {
     }
   }
 
+  async likePost(postID: string, userID: string): Promise<string> {
+    const postModel = await PostModel.findByIdAndUpdate(
+      postID,
+      {
+        $push: {
+          likes: userID
+        }
+      },
+      { new: true }
+    )
+
+    return 'Post liked'
+  }
+
   async findPostById(id: string): Promise<PostWithID | undefined> {
     const post = await PostModel.findById(id).select('-__v').exec()
 

@@ -76,6 +76,46 @@ class PostUseCases {
     return 'Post deleted'
   }
 
+  async likePost(id: string, username: string) {
+    if (!id) {
+      throw new HttpException('Post id is required', 400)
+    }
+    if (!username) {
+      throw new HttpException('User id is required', 400)
+    }
+
+    // verify if post and user exists
+    const post = await this.postRepository.findPostById(id)
+    if (!post) {
+      throw new HttpException('Post not found', 404)
+    }
+
+    const user = await this.userUseCases.findByUsername(username)
+    if (!user) {
+      throw new HttpException('User not found', 404)
+    }
+
+    // verify if author blocked user
+    const author = await this.userUseCases.findById(post.authorID)
+    if (!author) {
+      throw new HttpException('Author not found', 404)
+    }
+    if (author?.usersBlocked?.includes(user._id)) {
+      throw new HttpException('The author has blocked you', 409)
+    }
+    if (user?.usersBlocked?.includes(author._id)) {
+      throw new HttpException('You have blocked the author', 409)
+    }
+
+    // verify if user already liked the post
+    if (post?.likes?.includes(user._id)) {
+      throw new HttpException('You already liked this post', 409)
+    }
+
+    const result = await this.postRepository.likePost(post._id, user._id)
+    return result
+  }
+
   async findPostById(id: string) {
     const post = await this.postRepository.findPostById(id)
     return post

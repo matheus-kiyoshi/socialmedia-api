@@ -46,6 +46,11 @@ class PostRoutes {
 			checkToken,
 			this.postController.deletePost.bind(this.postController)
 		)
+		this.router.post(
+			'/posts/:id/like',
+			checkToken,
+			this.postController.likePost.bind(this.postController)
+		)
 	}
 }
 

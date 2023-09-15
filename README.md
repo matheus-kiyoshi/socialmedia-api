@@ -47,7 +47,7 @@
   - `/api/posts/:postID` (DELETE) => (need jwt) Delete post
     - DONE
   - `/api/posts/:postID/like` (POST) => Send a like to post (limit of one per user)
-    - TODO
+    - DONE
   - `/api/posts/:postID/repost` (POST) => Repost on user account (post only can be reposted once by each user)
     - TODO
   - `/api/posts/:postID/report` (POST) => Report post

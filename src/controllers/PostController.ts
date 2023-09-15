@@ -54,6 +54,18 @@ class postController {
     }
   }
 
+  async likePost(req: Request, res: Response, next: NextFunction) {
+    const id = req.params.id
+    const { username } = req.body
+
+    try {
+      await this.postUseCases.likePost(id, username)
+      return res.status(200).json({ message: 'Post liked' })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async findPostById(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id
     
