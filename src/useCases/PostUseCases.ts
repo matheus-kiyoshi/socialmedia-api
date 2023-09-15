@@ -1,5 +1,5 @@
 import { HttpException } from '../interfaces/HttpException'
-import { PostRepository } from '../repositories/PostRepository'
+import { EditPost, PostRepository } from '../repositories/PostRepository'
 import Post from '../entities/Post'
 import { UserUseCases } from './UserUseCases'
 
@@ -30,6 +30,29 @@ class PostUseCases {
     post.coments = []
     
     const result = await this.postRepository.createPost(post)
+    return result
+  }
+
+  async updatePost(post: EditPost) {
+    if (!post.id) {
+      throw new HttpException('Post id is required', 400)
+    }
+    if (!post.authorID) {
+      throw new HttpException('Author id is required', 400)
+    }
+    if (!post.content) {
+      throw new HttpException('Content is required', 400)
+    }
+
+    const POST = await this.postRepository.findPostById(post.id)
+    if (!POST) {
+      throw new HttpException('Post not found', 404)
+    }
+    if (POST?.authorID.toString() !== post.authorID) {
+      throw new HttpException('You cannot update this post', 403)
+    }
+
+    const result = await this.postRepository.updatePost(post)
     return result
   }
 

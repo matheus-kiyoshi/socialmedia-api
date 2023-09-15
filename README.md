@@ -41,9 +41,9 @@
   - `/api/posts` (GET) => Get posts (limit of posts received)
     - DONE
   - `/api/posts/:postID` (GET) => Get specific post
-    - DOING
+    - DONE
   - `/api/posts/:postID` (PATCH) => (need jwt) Edit post
-    - TODO
+    - DONE
   - `/api/posts/:postID` (DELETE) => (need jwt) Delete post
     - TODO
   - `/api/posts/:postID/like` (POST) => Send a like to post (limit of one per user)

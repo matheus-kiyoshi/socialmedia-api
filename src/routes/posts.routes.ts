@@ -35,6 +35,12 @@ class PostRoutes {
 			'/posts/:id',
 			this.postController.findPostById.bind(this.postController)
 		)
+		this.router.patch(
+			'/posts/:id',
+			checkToken,
+			upload.array('media', 4),
+			this.postController.updatePost.bind(this.postController)
+		)
 	}
 }
 

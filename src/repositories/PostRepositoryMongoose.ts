@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { PostRepository, PostWithID } from './PostRepository'
+import { EditPost, PostRepository, PostWithID } from './PostRepository'
 import Post from '../entities/Post'
 
 const PostModel = mongoose.model('Post', new mongoose.Schema({
@@ -29,6 +29,10 @@ const PostModel = mongoose.model('Post', new mongoose.Schema({
     type: Array,
     ref: 'User'
   },
+  wasEdited: {
+    type: Boolean,
+    default: false
+  }
 }))
 
 class PostRepositoryMongoose implements PostRepository {
@@ -38,6 +42,22 @@ class PostRepositoryMongoose implements PostRepository {
     await postModel.save()
 
     return postModel
+  }
+
+  async updatePost(post: EditPost): Promise<PostWithID | undefined> {
+    const postModel = await PostModel.findByIdAndUpdate(
+      post.id,
+      {
+        $set: {
+          content: post.content,
+          media: post.media,
+          isEdited: true
+        }
+      },
+      { new: true }
+    ).select('-__v').exec()
+
+    return postModel ? postModel.toObject() : undefined
   }
 
   async findPostById(id: string): Promise<PostWithID | undefined> {

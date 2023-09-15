@@ -8,7 +8,7 @@ class postController {
     const { username, content } = req.body
     const files = (req.files as Express.Multer.File[]).map(
       (file) => file.filename
-    );
+    )
 
     try {
       const post = await this.postUseCases.createPost({
@@ -22,6 +22,26 @@ class postController {
     }
   }
 
+  async updatePost(req: Request, res: Response, next: NextFunction) {
+    const id = req.params.id
+    const { authorID, content } = req.body
+    const files = (req.files as Express.Multer.File[]).map(
+      (file) => file.filename
+    )
+
+    try {
+      const post = await this.postUseCases.updatePost({
+        id,
+        authorID,
+        content,
+        media: files
+      })
+      return res.status(200).json(post)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async findPostById(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id
     
@@ -30,7 +50,7 @@ class postController {
       if (!post) {
         return res.status(404).json({ message: 'Post not found' })
       }
-      
+
       return res.status(200).json(post)
     } catch (error) {
       next(error)
