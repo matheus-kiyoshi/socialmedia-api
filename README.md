@@ -37,7 +37,7 @@
 # POST
 
   - `/api/posts` (POST) => Create post
-    - TODO
+    - DONE
   - `/api/posts` (GET) => Get posts (limit of posts received)
     - TODO
   - `/api/posts/:postID` (GET) => Get specific post

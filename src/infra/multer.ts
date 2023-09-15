@@ -5,7 +5,7 @@ import crypto from 'node:crypto'
 const upload = multer({
   dest: path.resolve(__dirname, '..', 'tmp', 'uploads'),
   limits: {
-    fileSize: 1024 * 1024 * 2,
+    fileSize: 1024 * 1024 * 6,
   },
   storage: multer.diskStorage({
     destination(req, file, callback) {
