@@ -51,7 +51,7 @@ class PostRepositoryMongoose implements PostRepository {
         $set: {
           content: post.content,
           media: post.media,
-          isEdited: true
+          wasEdited: true
         }
       },
       { new: true }
