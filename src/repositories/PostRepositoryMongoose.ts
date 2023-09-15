@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { PostRepository } from './PostRepository'
+import { PostRepository, PostWithID } from './PostRepository'
 import Post from '../entities/Post'
 
 const PostModel = mongoose.model('Post', new mongoose.Schema({
@@ -38,6 +38,12 @@ class PostRepositoryMongoose implements PostRepository {
     await postModel.save()
 
     return postModel
+  }
+
+  async findAllPosts(skip: number): Promise<PostWithID[] | undefined> {
+    const posts = await PostModel.find().select('-__v').skip(skip).limit(20).exec()
+
+    return posts ? posts.map((post) => post.toObject()) : undefined
   }
 }
 

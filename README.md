@@ -39,7 +39,7 @@
   - `/api/posts` (POST) => Create post
     - DONE
   - `/api/posts` (GET) => Get posts (limit of posts received)
-    - TODO
+    - DONE
   - `/api/posts/:postID` (GET) => Get specific post
     - TODO
   - `/api/posts/:postID` (PATCH) => (need jwt) Edit post

@@ -21,6 +21,17 @@ class postController {
       next(error)
     }
   }
+
+  async findAllPosts(req: Request, res: Response, next: NextFunction) {
+    const skip = req.query.skip as string | undefined
+
+    try {
+      const posts = await this.postUseCases.findAllPosts(skip)
+      return res.status(200).json(posts)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export { postController }

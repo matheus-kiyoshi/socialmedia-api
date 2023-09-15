@@ -27,6 +27,10 @@ class PostRoutes {
 			upload.array('media', 4),
 			this.postController.createPost.bind(this.postController)
 		)
+		this.router.get(
+			'/posts',
+			this.postController.findAllPosts.bind(this.postController)
+		)
 	}
 }
 

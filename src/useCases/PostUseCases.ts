@@ -32,6 +32,13 @@ class PostUseCases {
     const result = await this.postRepository.createPost(post)
     return result
   }
+
+  async findAllPosts(skipParam?: string) {
+    const skip = skipParam ? parseInt(skipParam, 10) : 0
+
+    const posts = await this.postRepository.findAllPosts(skip)
+    return posts
+  }
 }
 
 export { PostUseCases }
