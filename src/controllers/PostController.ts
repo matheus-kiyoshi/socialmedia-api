@@ -59,8 +59,8 @@ class postController {
     const { username } = req.body
 
     try {
-      await this.postUseCases.likePost(id, username)
-      return res.status(200).json({ message: 'Post liked' })
+      const result = await this.postUseCases.likePost(id, username)
+      return res.status(200).json({ message: result })
     } catch (error) {
       next(error)
     }

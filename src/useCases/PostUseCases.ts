@@ -109,7 +109,8 @@ class PostUseCases {
 
     // verify if user already liked the post
     if (post?.likes?.includes(user._id)) {
-      throw new HttpException('You already liked this post', 409)
+      const result = await this.postRepository.unlikePost(post._id, user._id)
+      return result
     }
 
     const result = await this.postRepository.likePost(post._id, user._id)

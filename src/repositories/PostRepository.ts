@@ -16,6 +16,7 @@ interface PostRepository {
   updatePost(post: EditPost): Promise<PostWithID | undefined>
   deletePost(id: string): Promise<string>
   likePost(postID: string, userID: string): Promise<string>
+  unlikePost(postID: string, userID: string): Promise<string>
   findPostById(id: string): Promise<PostWithID | undefined>
   findAllPosts(skip: number): Promise<PostWithID[] | undefined>
 }
