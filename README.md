@@ -49,7 +49,7 @@
   - `/api/posts/:postID/like` (POST) => Send a like to post (limit of one per user)
     - DONE
   - `/api/posts/:postID/repost` (POST) => Repost on user account (post only can be reposted once by each user)
-    - TODO
+    - DOING
   - `/api/posts/:postID/report` (POST) => Report post
     - TODO
 

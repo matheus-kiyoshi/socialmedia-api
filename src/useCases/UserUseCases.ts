@@ -68,20 +68,19 @@ class UserUseCases {
     }
 
     try {
-      const secret =
-        process.env.SECRET ||
-        'DA312D3124WAOIB521UDVPONA52152DGPWAB521DYNVWAD412WO44123217659AVBH'
+      const secret = process.env.SECRET || ''
       const token = jwt.sign(
         {
-          id: user._id
+          id: user._id,
+          username: user.username
         },
         secret,
         {
-          expiresIn: '1d'
+          expiresIn: '8h'
         }
       )
 
-      return { msg: 'Login successful', token: token, id: user._id }
+      return { msg: 'Login successful', token: token }
     } catch (error) {
       throw new HttpException('Internal server error', 500)
     }
@@ -344,21 +343,20 @@ class UserUseCases {
     if (!username) {
       throw new HttpException('Username is required', 404)
     }
-    if (!user) {
-      throw new HttpException('User is required', 404)
-    }
     if (!skip) {
       skip = 0
     }
 
     let users = await this.userRepository.findAllFollowers(username, skip)
-    const blockedUsers = await this.userRepository.findBlockedUsers(user, 0)
-    
-    if (users && blockedUsers) {
-      users.forEach(user => {
-        if (blockedUsers.some(blockedUser => blockedUser.username === user.username)) {
-          user.isBlocked = true
-      }})
+    if (user) {
+      const blockedUsers = await this.userRepository.findBlockedUsers(user, 0)
+      
+      if (users && blockedUsers) {
+        users.forEach(user => {
+          if (blockedUsers.some(blockedUser => blockedUser.username === user.username)) {
+            user.isBlocked = true
+        }})
+      }
     }
 
     return users
@@ -368,21 +366,20 @@ class UserUseCases {
     if (!username) {
       throw new HttpException('Username is required', 404)
     }
-    if (!user) {
-      throw new HttpException('User is required', 404)
-    }
     if (!skip) {
       skip = 0
     }
 
     let users = await this.userRepository.findAllFollowing(username, skip)
-    const blockedUsers = await this.userRepository.findBlockedUsers(user, 0)
-
-    if (users && blockedUsers) {
-      users.forEach(user => {
-        if (blockedUsers.some(blockedUser => blockedUser.username === user.username)) {
-          user.isBlocked = true
-      }})
+    if (users) {
+      const blockedUsers = await this.userRepository.findBlockedUsers(user, 0)
+      
+      if (users && blockedUsers) {
+        users.forEach(user => {
+          if (blockedUsers.some(blockedUser => blockedUser.username === user.username)) {
+            user.isBlocked = true
+        }})
+      }
     }
 
     return users

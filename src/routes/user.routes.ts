@@ -41,25 +41,30 @@ class UserRoutes {
       this.userController.findUser.bind(this.userController)
     )
     this.router.patch(
-      '/users/:username/password',
+      '/profile/password',
       checkToken,
       this.userController.updatePassword.bind(this.userController)
     )
     this.router.patch(
-      '/users/:username/profile',
+      '/profile',
       checkToken,
       upload.single('icon'),
       this.userController.updateProfile.bind(this.userController)
     )
     this.router.delete(
-      '/users/:username',
+      '/profile',
       checkToken,
       this.userController.deleteUser.bind(this.userController)
     )
     this.router.post(
-      '/users/:username/follow',
+      '/users/:userToFollow/follow',
       checkToken,
       this.userController.followUser.bind(this.userController)
+    )
+    this.router.get(
+      '/profile',
+      checkToken,
+      this.userController.getProfile.bind(this.userController)
     )
     this.router.get(
       '/users/:username/followers',
@@ -70,22 +75,22 @@ class UserRoutes {
       this.userController.findAllFollowing.bind(this.userController)
     )
     this.router.delete(
-      '/users/:username/unfollow',
+      '/users/:userToUnfollow/unfollow',
       checkToken,
       this.userController.unfollowUser.bind(this.userController)
     )
     this.router.post(
-      '/users/:username/block',
+      '/users/:userToBlock/block',
       checkToken,
       this.userController.blockUser.bind(this.userController)
     )
     this.router.get(
-      '/users/:username/block',
+      '/blocks',
       checkToken,
       this.userController.findBlockedUsers.bind(this.userController)
     )
     this.router.delete(
-      '/users/:username/unblock',
+      '/users/:userToUnblock/unblock',
       checkToken,
       this.userController.unblockUser.bind(this.userController)
     )

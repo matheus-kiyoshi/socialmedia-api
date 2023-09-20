@@ -117,6 +117,40 @@ class PostUseCases {
     return result
   }
 
+  async rePost(id: string, username: string, content: string) {
+    if (!id) {
+      throw new HttpException('Post id is required', 400)
+    }
+    if (!username) {
+      throw new HttpException('User id is required', 400)
+    }
+    if (!content) {
+      content = ''
+    }
+    
+    const post = await this.postRepository.findPostById(id)
+    if (!post) {
+      throw new HttpException('Post not found', 404)
+    }
+
+    const user = await this.userUseCases.findByUsername(username)
+    if (!user) {
+      throw new HttpException('User not found', 404)
+    }
+
+    const POST = {
+      authorID: user._id,
+      content: content,
+      date: new Date(),
+      likes: [],
+      reposts: [],
+      coments: []
+    }
+
+    const result = await this.postRepository.rePost(POST, post._id)
+    return result
+  }
+
   async findPostById(id: string) {
     const post = await this.postRepository.findPostById(id)
     return post

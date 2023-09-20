@@ -5,7 +5,8 @@ class postController {
   constructor(private postUseCases: PostUseCases) {}
 
   async createPost(req: Request, res: Response, next: NextFunction) {
-    const { username, content } = req.body
+    const { username } = req.user
+    const { content } = req.body
     const files = (req.files as Express.Multer.File[]).map(
       (file) => file.filename
     )
@@ -23,8 +24,9 @@ class postController {
   }
 
   async updatePost(req: Request, res: Response, next: NextFunction) {
+    const { id: authorID } = req.params
     const id = req.params.id
-    const { authorID, content } = req.body
+    const { content } = req.body
     const files = (req.files as Express.Multer.File[]).map(
       (file) => file.filename
     )
@@ -44,7 +46,7 @@ class postController {
 
   async deletePost(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id
-    const { authorID } = req.body
+    const { id: authorID } = req.user
 
     try {
       await this.postUseCases.deletePost(id, authorID)
@@ -56,7 +58,7 @@ class postController {
 
   async likePost(req: Request, res: Response, next: NextFunction) {
     const id = req.params.id
-    const { username } = req.body
+    const { username } = req.user
 
     try {
       const result = await this.postUseCases.likePost(id, username)
@@ -89,6 +91,19 @@ class postController {
       return res.status(200).json(posts)
     } catch (error) {
       next(error)
+    }
+  }
+
+  async rePost(req: Request, res: Response, next: NextFunction) {
+    const id = req.params.id
+    const { username } = req.user
+    const { content } = req.body
+
+    try {
+      const result = await this.postUseCases.rePost(id, username, content)
+      return res.status(200).json({ message: result })
+    } catch (error) {
+      
     }
   }
 }

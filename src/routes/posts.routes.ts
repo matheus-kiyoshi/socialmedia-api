@@ -24,6 +24,7 @@ class PostRoutes {
 		// default route => /api/
 		this.router.post(
 			'/posts',
+			checkToken,
 			upload.array('media', 4),
 			this.postController.createPost.bind(this.postController)
 		)
@@ -50,6 +51,11 @@ class PostRoutes {
 			'/posts/:id/like',
 			checkToken,
 			this.postController.likePost.bind(this.postController)
+		)
+		this.router.post(
+			'/posts/:id/repost',
+			checkToken,
+			this.postController.rePost.bind(this.postController)
 		)
 	}
 }

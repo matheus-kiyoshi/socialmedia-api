@@ -30,7 +30,7 @@ class UserController {
   }
 
   async updatePassword(req: Request, res: Response, next: NextFunction) {
-    const { username } = req.params
+    const { username } = req.user
     const { currentPassword, newPassword } = req.body
 
     try {
@@ -46,7 +46,7 @@ class UserController {
   }
 
   async deleteUser(req: Request, res: Response, next: NextFunction) {
-    const { username } = req.params
+    const { username } = req.user
     const { password } = req.body
 
     try {
@@ -58,7 +58,7 @@ class UserController {
   }
 
   async updateProfile(req: Request, res: Response, next: NextFunction) {
-    const { username } = req.params
+    const { username } = req.user
     const { nickname, bio } = req.body
     const file = req.file
     let icon
@@ -76,8 +76,8 @@ class UserController {
   }
 
   async followUser(req: Request, res: Response, next: NextFunction) {
-    const { username } = req.params
-    const { userToFollow } = req.body
+    const { username } = req.user
+    const { userToFollow } = req.params
    
     try {
       await this.userUseCase.followUser(username, userToFollow)
@@ -88,8 +88,8 @@ class UserController {
   }
 
   async unfollowUser(req: Request, res: Response, next: NextFunction) {
-    const { username } = req.params
-    const { userToUnfollow } = req.body
+    const { username } = req.user
+    const { userToUnfollow } = req.params
 
     try {
       await this.userUseCase.unfollowUser(username, userToUnfollow)
@@ -100,8 +100,8 @@ class UserController {
   }
 
   async blockUser(req: Request, res: Response, next: NextFunction) {
-    const { username } = req.params
-    const { userToBlock } = req.body
+    const { username } = req.user
+    const { userToBlock } = req.params
 
     try {
       await this.userUseCase.blockUser(username, userToBlock)
@@ -112,8 +112,8 @@ class UserController {
   }
 
   async unblockUser(req: Request, res: Response, next: NextFunction) {
-    const { username } = req.params
-    const { userToUnblock } = req.body
+    const { username } = req.user
+    const { userToUnblock } = req.params
 
     try {
       await this.userUseCase.unblockUser(username, userToUnblock)
@@ -124,7 +124,7 @@ class UserController {
   }
 
   async findBlockedUsers(req: Request, res: Response, next: NextFunction) {
-    const { username } = req.params
+    const { username } = req.user
     const { skip } = req.body
 
     try {
@@ -206,6 +206,10 @@ class UserController {
     }
   }
 
+  async getProfile(req: Request, res: Response, next: NextFunction) {
+    return res.status(200).json(req.user)
+  }
+
   async findAll(req: Request, res: Response, next: NextFunction) {
     try {
       const users = await this.userUseCase.findAll()
@@ -216,8 +220,9 @@ class UserController {
   }
 
   async reportUser(req: Request, res: Response, next: NextFunction) {
-    const { username } = req.params
-    const { userToReport, reason } = req.body
+    const username = req.user.username
+    const userToReport = req.params.username
+    const { reason } = req.body
 
     try {
       await this.userUseCase.reportUser(username, userToReport, reason)

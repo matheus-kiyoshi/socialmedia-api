@@ -32,6 +32,14 @@ const PostModel = mongoose.model('Post', new mongoose.Schema({
   wasEdited: {
     type: Boolean,
     default: false
+  },
+  isReposted: {
+    type: Boolean,
+    default: false
+  },
+  originalPost: {
+    type: String,
+    default: null
   }
 }))
 
@@ -95,6 +103,16 @@ class PostRepositoryMongoose implements PostRepository {
     )
 
     return 'Post unliked'
+  }
+
+  async rePost(post: Post, postID: string): Promise<string> {
+    const postModel = new PostModel(post)
+    postModel.isReposted = true
+    postModel.originalPost = postID
+    console.log(postModel)
+    await postModel.save()
+
+    return 'Post reposted'
   }
 
   async findPostById(id: string): Promise<PostWithID | undefined> {
