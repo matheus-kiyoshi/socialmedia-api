@@ -35,6 +35,7 @@
     - DONE
 
 # POST
+  - DONE
 
   - `/api/posts` (POST) => Create post
     - DONE
@@ -51,7 +52,7 @@
   - `/api/posts/:postID/repost` (POST) => Repost on user account (post only can be reposted once by each user)
     - DONE
   - `/api/posts/:postID/report` (POST) => Report post
-    - TODO
+    - DONE
 
 # COMMENTS
 

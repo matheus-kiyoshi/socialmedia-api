@@ -2,6 +2,7 @@ import { HttpException } from '../interfaces/HttpException'
 import { EditPost, PostRepository } from '../repositories/PostRepository'
 import Post from '../entities/Post'
 import { UserUseCases } from './UserUseCases'
+import nodemailer from 'nodemailer'
 
 class PostUseCases {
   constructor(
@@ -199,6 +200,55 @@ class PostUseCases {
 
     const posts = await this.postRepository.findAllPosts(skip)
     return posts
+  }
+
+  async reportUser(username: string, id: string, reason: string) {
+    if (!username) {
+      throw new HttpException('Username is required', 404)
+    }
+    if (!id) {
+      throw new HttpException('id to report is required', 404)
+    }
+    if (!reason) {
+      throw new HttpException('Reason is required', 404)
+    }
+
+    const post = await this.postRepository.findPostById(id)
+    if (!post) {
+      throw new HttpException('Post not found', 404)
+    }
+
+    const user = await this.userUseCases.findById(post.authorID)
+    if (!user) {
+      throw new HttpException('User not found', 404)
+    }
+
+    try {
+      const transporter = nodemailer.createTransport({
+        service: 'Outlook',
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      })
+  
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: process.env.EMAIL_RECEIVER,
+        subject: `Report post from ${user.username}`,
+        text: `Post ID: ${post._id}\nUser ID: ${user._id}\nReason: ${reason}`,
+      }
+      
+      return transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error('Error', error)
+        } else {
+          console.log('Email sent', info.response)
+        }
+      })
+    } catch (error) {
+      throw new HttpException('Internal server error', 500)
+    }
   }
 }
 

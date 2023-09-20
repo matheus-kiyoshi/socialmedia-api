@@ -109,6 +109,19 @@ class postController {
       next(error)
     }
   }
+
+  async reportPost(req: Request, res: Response, next: NextFunction) {
+    const { username } = req.user
+    const { id } = req.params
+    const { reason } = req.body
+
+    try {
+      await this.postUseCases.reportUser(username, id, reason)
+      return res.status(200).json({ message: 'Post reported' })
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export { postController }

@@ -57,6 +57,11 @@ class PostRoutes {
 			checkToken,
 			this.postController.rePost.bind(this.postController)
 		)
+		this.router.post(
+			'/posts/:id/report',
+			checkToken,
+			this.postController.reportPost.bind(this.postController)
+		)
 	}
 }
 
