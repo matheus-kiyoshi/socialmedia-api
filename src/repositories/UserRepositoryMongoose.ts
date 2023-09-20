@@ -20,6 +20,14 @@ const UserModel = mongoose.model('User', new mongoose.Schema({
     type: Array,
     ref: 'User'
   },
+  posts: {
+    type: Array,
+    ref: 'Post'
+  },
+  reposts: {
+    type: Array,
+    ref: 'Post'
+  },
   postsCount: Number,
   usersBlocked: {
     type: Array,
@@ -126,6 +134,32 @@ class UserRepositoryMongoose implements UserRepository {
     )
 
     return 'Unblocked'
+  }
+
+  async addPostToUser(userID: string, postID: string): Promise<string> {
+    const userModel = await UserModel.findByIdAndUpdate(
+      userID,
+      { 
+        $push: { posts: postID }, 
+        $inc: { postsCount: 1 } 
+      },
+      { new: true }
+    )
+
+    return 'Post added'
+  }
+
+  async addRepostToUser(userID: string, postID: string): Promise<string> {
+    const userModel = await UserModel.findByIdAndUpdate(
+      userID,
+      { 
+        $push: { reposts: postID }, 
+        $inc: { postsCount: 1 } 
+      },
+      { new: true }
+    )
+
+    return 'Repost added'
   }
 
   async findByUsername(username: string): Promise<UserWithID | undefined> {

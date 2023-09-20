@@ -7,9 +7,12 @@ class postController {
   async createPost(req: Request, res: Response, next: NextFunction) {
     const { username } = req.user
     const { content } = req.body
-    const files = (req.files as Express.Multer.File[]).map(
-      (file) => file.filename
-    )
+    let files
+    if (req.files) {
+      files = (req.files as Express.Multer.File[]).map(
+        (file) => file.filename
+      )
+    }
 
     try {
       const post = await this.postUseCases.createPost({
@@ -95,15 +98,15 @@ class postController {
   }
 
   async rePost(req: Request, res: Response, next: NextFunction) {
-    const id = req.params.id
+    const { id } = req.params
     const { username } = req.user
     const { content } = req.body
-
+    
     try {
       const result = await this.postUseCases.rePost(id, username, content)
       return res.status(200).json({ message: result })
     } catch (error) {
-      
+      next(error)
     }
   }
 }

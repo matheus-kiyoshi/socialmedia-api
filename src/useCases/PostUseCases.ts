@@ -28,8 +28,14 @@ class PostUseCases {
     post.likes = []
     post.reposts = []
     post.coments = []
-    
+
     const result = await this.postRepository.createPost(post)
+    if (!result) {
+      throw new HttpException('Post not created', 500)
+    }
+    
+    const addPostToUser = await this.userUseCases.addPostToUser(user._id, result._id)
+    
     return result
   }
 
@@ -138,6 +144,32 @@ class PostUseCases {
       throw new HttpException('User not found', 404)
     }
 
+    // verify if user blocked author
+    if (user.usersBlocked?.includes(post.authorID)) {
+      throw new HttpException('You have blocked the author', 409)
+    }
+
+    // verify if author blocked user
+    const author = await this.userUseCases.findById(post.authorID)
+    if (author) {
+      if (author.usersBlocked?.includes(user._id)) {
+        throw new HttpException('The author has blocked you', 409)
+      }
+    }
+
+    let reposts
+    if (user.reposts) {
+      reposts = await this.postRepository.findUserReposts(user.reposts)
+
+      // verify if author already reposted
+      reposts?.map((repost) => {
+        if (repost.originalPost === post._id) {
+          throw new HttpException('You already reposted this post', 409)
+        }
+      })
+    }
+
+
     const POST = {
       authorID: user._id,
       content: content,
@@ -148,6 +180,12 @@ class PostUseCases {
     }
 
     const result = await this.postRepository.rePost(POST, post._id)
+    if (!result) {
+      throw new HttpException('Post not reposted', 500)
+    }
+
+    await this.userUseCases.addRepostToUser(user._id, result._id)
+
     return result
   }
 

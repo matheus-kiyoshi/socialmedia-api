@@ -37,6 +37,8 @@ class UserUseCases {
     user.nickname = user.username
     user.following = []
     user.followers = []
+    user.posts = []
+    user.reposts = []
     user.postsCount = 0    
     user.bio = ''
     user.usersBlocked = []
@@ -297,6 +299,40 @@ class UserUseCases {
     }
 
     const result = await this.userRepository.unblockUser(user, userUnblock)
+    return result
+  }
+
+  async addPostToUser(userID: string, postID: string) {
+    if (!userID) {
+      throw new HttpException('User id is required', 400)
+    }
+    if (!postID) {
+      throw new HttpException('Post id is required', 400)
+    }
+
+    const user = await this.userRepository.findById(userID)
+    if (!user) {
+      throw new HttpException('User not found', 404)
+    }
+
+    const result = await this.userRepository.addPostToUser(user._id, postID)
+    return result
+  }
+
+  async addRepostToUser(userID: string, postID: string) {
+    if (!userID) {
+      throw new HttpException('User id is required', 400)
+    }
+    if (!postID) {
+      throw new HttpException('Post id is required', 400)
+    }
+
+    const user = await this.userRepository.findById(userID)
+    if (!user) {
+      throw new HttpException('User not found', 404)
+    }
+
+    const result = await this.userRepository.addRepostToUser(user._id, postID)
     return result
   }
 

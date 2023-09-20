@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { EditPost, PostRepository, PostWithID } from './PostRepository'
+import { EditPost, PostRepository, PostWithID, repostValidation } from './PostRepository'
 import Post from '../entities/Post'
 
 const PostModel = mongoose.model('Post', new mongoose.Schema({
@@ -44,12 +44,12 @@ const PostModel = mongoose.model('Post', new mongoose.Schema({
 }))
 
 class PostRepositoryMongoose implements PostRepository {
-  async createPost(post: Post): Promise<unknown> {
+  async createPost(post: Post): Promise<PostWithID | undefined> {
     const postModel = new PostModel(post)
 
     await postModel.save()
 
-    return postModel
+    return postModel ? postModel.toObject() : undefined
   }
 
   async updatePost(post: EditPost): Promise<PostWithID | undefined> {
@@ -105,14 +105,30 @@ class PostRepositoryMongoose implements PostRepository {
     return 'Post unliked'
   }
 
-  async rePost(post: Post, postID: string): Promise<string> {
+  async rePost(post: Post, postID: string): Promise<PostWithID | undefined> {
     const postModel = new PostModel(post)
     postModel.isReposted = true
     postModel.originalPost = postID
-    console.log(postModel)
+
     await postModel.save()
 
-    return 'Post reposted'
+    const postReposted = await PostModel.findByIdAndUpdate(
+      postID,
+      {
+        $push: {
+          reposts: postModel._id
+        }
+      },
+      { new: true }
+    )
+
+    return postModel ? postModel.toObject() : undefined
+  }
+
+  async findUserReposts(id: string[]): Promise<repostValidation[] | undefined> {
+    const posts = await PostModel.find({ _id: { $in: id } }).select('_id authorID originalPost').exec()
+
+    return posts ? posts.map((post) => post.toObject()) : undefined
   }
 
   async findPostById(id: string): Promise<PostWithID | undefined> {

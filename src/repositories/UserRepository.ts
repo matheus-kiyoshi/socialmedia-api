@@ -11,6 +11,8 @@ export interface PublicUser {
   bio: string
   followers?: number
   following?: number
+  posts?: string[]
+  reposts?: string[]
   postsCount?: number
 }
 
@@ -31,6 +33,8 @@ interface UserRepository {
   unfollowUser(user: UserWithID, user2: UserWithID): Promise<string>
   updateUserBlocks(user: UserWithID, user2: UserWithID): Promise<string>
   unblockUser(user: UserWithID, user2: UserWithID): Promise<string>
+  addPostToUser(userID: string, postID: string): Promise<string>
+  addRepostToUser(userID: string, postID: string): Promise<string>
   findByUsername(username: string): Promise<UserWithID | undefined>
   findUser(username: string): Promise<PublicUser | undefined>
   findById(id: string): Promise<UserWithID | undefined>
