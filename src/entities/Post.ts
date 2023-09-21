@@ -3,7 +3,7 @@ class Post {
     public authorID: string,
     public content: string,
     public date?: Date,
-    public coments?: Post[],
+    public coments?: string[],
     public likes?: string[],
     public reposts?: string[],
     public originalPost?: string,

@@ -147,6 +147,18 @@ class postController {
       next(error)
     }
   }
+
+  async findAllPostComments(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params
+    const skip = req.query.skip as string | undefined
+    
+    try {
+      const comments = await this.postUseCases.findAllPostComments(id, skip)
+      return res.status(200).json(comments)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export { postController }

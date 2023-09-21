@@ -307,6 +307,29 @@ class PostUseCases {
     
     return result
   }
+
+  async findAllPostComments(id: string, skipParam?: string) {
+    if (!id) {
+      throw new HttpException('Post id is required', 400)
+    }
+    const skip = skipParam ? parseInt(skipParam, 10) : 0
+
+    const post = await this.postRepository.findPostById(id)
+    if (!post) {
+      throw new HttpException('Post not found', 404)
+    }
+
+    if (!post.coments) {
+      return []
+    }
+
+    const comments = await this.commentRepository.findAllPostComments(post.coments, skip)
+    if(!comments) {
+      throw new HttpException('Comments not found', 404)
+    }
+    
+    return comments
+  }
 }
 
 export { PostUseCases }

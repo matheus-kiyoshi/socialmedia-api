@@ -51,6 +51,12 @@ class CommentRepositoryMongoose implements CommentRepository {
 
 		return commentModel ? commentModel.toObject() : undefined
 	}
+
+	async findAllPostComments(postComments: string[], skip: number): Promise<PostWithID[] | undefined> {
+		const comments = await CommentModel.find({ _id: { $in: postComments } }).select('-__v').skip(skip).limit(20).exec()
+
+    return comments ? comments.map((comment) => comment.toObject()) : undefined
+  }
 }
 
 export { CommentRepositoryMongoose }

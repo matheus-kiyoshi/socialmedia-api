@@ -6,6 +6,7 @@ export interface PostWithID extends Post {
 
 interface CommentRepository {
 	createComment(post: Post): Promise<PostWithID | undefined>
+	findAllPostComments(postComments: string[], skip: number): Promise<PostWithID[] | undefined>
 }
 
 export { CommentRepository }

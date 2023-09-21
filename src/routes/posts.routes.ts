@@ -73,6 +73,10 @@ class PostRoutes {
 			checkToken,
 			this.postController.createComment.bind(this.postController)
 		)
+		this.router.get(
+			'/posts/:id/comments',
+			this.postController.findAllPostComments.bind(this.postController)
+		)
 	}
 }
 
