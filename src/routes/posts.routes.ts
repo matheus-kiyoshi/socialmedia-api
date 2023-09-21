@@ -6,6 +6,7 @@ import { upload } from '../infra/multer'
 import checkToken from '../middlewares/checkToken.middleware'
 import { UserUseCases } from '../useCases/UserUseCases'
 import { UserRepositoryMongoose } from '../repositories/UserRepositoryMongoose'
+import { CommentRepositoryMongoose } from '../repositories/CommentRepositoryMongoose'
 
 class PostRoutes {
 	public router: Router
@@ -15,13 +16,16 @@ class PostRoutes {
 		const userRepository = new UserRepositoryMongoose()
 		const userUseCases = new UserUseCases(userRepository)
 		const postRepository = new PostRepositoryMongoose()
-		const postUseCases = new PostUseCases(postRepository, userUseCases)
+		const commentRepository = new CommentRepositoryMongoose()
+		const postUseCases = new PostUseCases(postRepository, commentRepository, userUseCases)
 		this.postController = new postController(postUseCases)
 		this.initRoutes()
 	}
 
 	initRoutes() {
 		// default route => /api/
+
+		// POSTS ROUTES
 		this.router.post(
 			'/posts',
 			checkToken,
@@ -61,6 +65,13 @@ class PostRoutes {
 			'/posts/:id/report',
 			checkToken,
 			this.postController.reportPost.bind(this.postController)
+		)
+
+		// COMMENTS ROUTES
+		this.router.post(
+			'/posts/:id/comments',
+			checkToken,
+			this.postController.createComment.bind(this.postController)
 		)
 	}
 }

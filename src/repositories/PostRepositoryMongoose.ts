@@ -125,6 +125,20 @@ class PostRepositoryMongoose implements PostRepository {
     return postModel ? postModel.toObject() : undefined
   }
 
+  async addCommentToPost(postID: string, commentID: string): Promise<string> {
+    const postModel = await PostModel.findByIdAndUpdate(
+      postID,
+      {
+        $push: {
+          coments: commentID
+        }
+      },
+      { new: true }
+    )
+
+    return 'Comment added'
+  }
+
   async findUserReposts(id: string[]): Promise<repostValidation[] | undefined> {
     const posts = await PostModel.find({ _id: { $in: id } }).select('_id authorID originalPost').exec()
 

@@ -122,6 +122,31 @@ class postController {
       next(error)
     }
   }
+
+  // Comments Controller
+
+  async createComment(req: Request, res: Response, next: NextFunction) {
+    const { username } = req.user
+    const { id } = req.params
+    const { content } = req.body
+    let files
+    if (req.files) {
+      files = (req.files as Express.Multer.File[]).map(
+        (file) => file.filename
+      )
+    }
+
+    try {
+      const post = await this.postUseCases.createComment(id, {
+        authorID: username, 
+        content, 
+        media: files
+      })
+      return res.status(201).json(post)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export { postController }

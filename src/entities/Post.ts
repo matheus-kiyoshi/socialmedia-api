@@ -6,6 +6,7 @@ class Post {
     public coments?: Post[],
     public likes?: string[],
     public reposts?: string[],
+    public originalPost?: string,
     public media?: string[]
   ) {}
 }

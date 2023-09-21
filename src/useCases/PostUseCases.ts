@@ -3,10 +3,12 @@ import { EditPost, PostRepository } from '../repositories/PostRepository'
 import Post from '../entities/Post'
 import { UserUseCases } from './UserUseCases'
 import nodemailer from 'nodemailer'
+import { CommentRepository } from '../repositories/CommentRepository'
 
 class PostUseCases {
   constructor(
     private postRepository: PostRepository,
+    private commentRepository: CommentRepository,
     private userUseCases: UserUseCases
   ) {}
 
@@ -249,6 +251,61 @@ class PostUseCases {
     } catch (error) {
       throw new HttpException('Internal server error', 500)
     }
+  }
+
+  // COMMENT CASES
+
+  async createComment(originalPostID: string, post: Post) {
+    if (!originalPostID) {
+      throw new HttpException('Post id is required', 400)
+    }
+    if (!post.authorID) {
+      throw new HttpException('Username is required', 400)
+    }
+    if (!post.content) {
+      throw new HttpException('Content is required', 400)
+    }
+
+    const originalPost = await this.postRepository.findPostById(originalPostID)
+    if (!originalPost) {
+      throw new HttpException('Post not found', 404)
+    }
+
+    const user = await this.userUseCases.findByUsername(post.authorID)
+    if (!user) {
+      throw new HttpException('User not found', 404)
+    }
+
+    // verify if user blocked author
+    if (user.usersBlocked?.includes(originalPost.authorID)) {
+      throw new HttpException('You have blocked the author', 409)
+    }
+
+    // verify if author blocked user
+    const author = await this.userUseCases.findById(originalPost.authorID)
+    if (author) {
+      if (author.usersBlocked?.includes(user._id)) {
+        throw new HttpException('The author has blocked you', 409)
+      }
+    }
+
+    // default attributes
+    post.authorID = user._id
+    post.date = new Date()
+    post.likes = []
+    post.reposts = []
+    post.coments = []
+    post.originalPost = originalPost._id
+
+    const result = await this.commentRepository.createComment(post)
+    if (!result) {
+      throw new HttpException('Comment not created', 500)
+    }
+
+    await this.postRepository.addCommentToPost(originalPostID, result._id)
+    await this.userUseCases.addPostToUser(user._id, result._id)
+    
+    return result
   }
 }
 
