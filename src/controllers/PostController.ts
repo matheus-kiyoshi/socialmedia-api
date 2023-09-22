@@ -101,9 +101,15 @@ class postController {
     const { id } = req.params
     const { username } = req.user
     const { content } = req.body
+    let files
+    if (req.files) {
+      files = (req.files as Express.Multer.File[]).map(
+        (file) => file.filename
+      )
+    }
     
     try {
-      const result = await this.postUseCases.rePost(id, username, content)
+      const result = await this.postUseCases.rePost(id, username, content, files)
       return res.status(200).json({ message: result })
     } catch (error) {
       next(error)

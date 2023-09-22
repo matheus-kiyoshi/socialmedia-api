@@ -132,7 +132,7 @@ class PostUseCases {
     return result
   }
 
-  async rePost(id: string, username: string, content: string) {
+  async rePost(id: string, username: string, content: string, files?: string[]) {
     if (!id) {
       throw new HttpException('Post id is required', 400)
     }
@@ -141,6 +141,9 @@ class PostUseCases {
     }
     if (!content) {
       content = ''
+    }
+    if (!files) {
+      files = []
     }
     
     const post = await this.postRepository.findPostById(id)
@@ -183,6 +186,7 @@ class PostUseCases {
       authorID: user._id,
       content: content,
       date: new Date(),
+      media: files,
       likes: [],
       reposts: [],
       coments: []
