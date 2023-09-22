@@ -214,6 +214,20 @@ class UserRepositoryMongoose implements UserRepository {
     const userModel = await UserModel.find().select('-password -__v').exec()
     return userModel ? userModel.map(user => user.toObject()) : undefined
   }
+
+  async searchUsers(query: string): Promise<PublicUserCard[] | undefined> {
+    const userModel = await UserModel.find(
+      { 
+        $or: [
+          { username: { $regex: query, $options: 'i' } },
+          { nickname: { $regex: query, $options: 'i' } },
+          { bio: { $regex: query, $options: 'i' } }
+        ]
+      }
+    ).select('username nickname icon bio isBlocked').exec()
+
+    return userModel ? userModel.map(user => user.toObject()) : undefined
+  }
 }
 
 export { UserRepositoryMongoose }

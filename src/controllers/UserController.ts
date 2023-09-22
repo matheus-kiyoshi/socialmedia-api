@@ -219,6 +219,17 @@ class UserController {
     }
   }
 
+  async searchUsers(req: Request, res: Response, next: NextFunction) {
+    const query = req.query.q as string
+    
+    try {
+      const users = await this.userUseCase.searchUsers(query)
+      return res.status(200).json(users)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async reportUser(req: Request, res: Response, next: NextFunction) {
     const username = req.user.username
     const userToReport = req.params.username

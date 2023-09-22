@@ -122,7 +122,7 @@ class PostRepositoryMongoose implements PostRepository {
       { new: true }
     )
 
-    return postReposted ? postReposted.toObject() : undefined
+    return postModel ? postModel.toObject() : undefined
   }
 
   async createComment(post: Post): Promise<PostWithID | undefined> {

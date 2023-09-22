@@ -60,23 +60,11 @@
     - DONE
   - `/api/posts/:postID/comments` (GET) => Get post comments
     - DONE
-  - `/api/posts/:postID/comments/:commentID` (GET) => Get specific commentary
-    - TODO
-  - `/api/posts/:postID/comments/:commentID` (PATCH) => (need to be authenticated) Edit commentary
-    - TODO
-  - `/api/posts/:postID/comments/:commentID` (DELETE) => (need to be authenticated) Delete commentary
-    - TODO
-  - `/api/posts/:postID/comments/:commentID/replies` (POST) => Replies to a comment
-    - TODO
-  - `/api/posts/:postID/comments/:commentID/replies` (GET) => Get all comment replies
-    - TODO
-  - `/api/posts/:postID/comments/:commentID/replies/:replyID` (GET) => Get specific reply
-    - TODO
 
 # SEARCH
 
   - `/api/search/users` (GET) => Search users
-    - TODO
+    - DONE
   - `/api/search/posts` (GET) => Search posts
     - TODO
 

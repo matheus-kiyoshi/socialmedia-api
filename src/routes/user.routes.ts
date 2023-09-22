@@ -99,6 +99,10 @@ class UserRoutes {
       checkToken,
       this.userController.reportUser.bind(this.userController)
     )
+    this.router.get(
+      '/u/search',
+      this.userController.searchUsers.bind(this.userController)
+    )
   }
 }
 

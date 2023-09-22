@@ -36,6 +36,7 @@ interface UserRepository {
   addPostToUser(userID: string, postID: string): Promise<string>
   addRepostToUser(userID: string, postID: string): Promise<string>
   findByUsername(username: string): Promise<UserWithID | undefined>
+  searchUsers(query: string): Promise<PublicUserCard[] | undefined>
   findUser(username: string): Promise<PublicUser | undefined>
   findById(id: string): Promise<UserWithID | undefined>
   findBlockedUsers(username: string, skip: number): Promise<PublicUserCard[] | undefined>

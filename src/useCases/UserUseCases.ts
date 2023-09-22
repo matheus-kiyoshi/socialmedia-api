@@ -426,6 +426,15 @@ class UserUseCases {
     return users
   }
 
+  async searchUsers(query: string) {
+    if (!query) {
+      throw new HttpException('Query is required', 404)
+    }
+
+    const users = await this.userRepository.searchUsers(query)
+    return users
+  }
+
   async reportUser(username: string, userToReport: string, reason: string) {
     if (!username) {
       throw new HttpException('Username is required', 404)
