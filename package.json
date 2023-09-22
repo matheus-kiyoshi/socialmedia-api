@@ -1,14 +1,14 @@
 {
-  "name": "node",
+  "name": "socialmedia",
   "version": "1.0.0",
-  "description": "",
+  "description": "API for social media project",
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch ./src/main.ts",
     "test": "jest --forceExit"
   },
   "keywords": [],
-  "author": "",
+  "author": "Matheus Kiyoshi",
   "license": "ISC",
   "devDependencies": {
     "@types/axios": "^0.14.0",
