@@ -67,15 +67,4 @@
     - DONE
   - `/api/search/posts` (GET) => Search posts
     - DONE
-
-# To Think About
-
-  # NOTIFICATIONS
-
-    - `/api/notifications` (GET) => (need to be authenticated) Get user notifications
-      - TODO
-  
-  # CUSTOM FEED
-
-    - `/api/feed` (GET) => (need to be authenticated) Get posts related to who the user follows
-      - TODO
+    
