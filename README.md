@@ -57,9 +57,9 @@
 # COMMENTS
 
   - `/api/posts/:postID/comments` (POST) => Create a comment on the post
-    - TODO
+    - DONE
   - `/api/posts/:postID/comments` (GET) => Get post comments
-    - TODO
+    - DONE
   - `/api/posts/:postID/comments/:commentID` (GET) => Get specific commentary
     - TODO
   - `/api/posts/:postID/comments/:commentID` (PATCH) => (need to be authenticated) Edit commentary

@@ -24,7 +24,9 @@ interface PostRepository {
   likePost(postID: string, userID: string): Promise<string>
   unlikePost(postID: string, userID: string): Promise<string>
   rePost(post: Post, postID: string): Promise<PostWithID | undefined>
+  createComment(post: Post): Promise<PostWithID | undefined>
   addCommentToPost(postID: string, commentID: string): Promise<string>
+  findAllPostComments(commentsID: string[], skip: number): Promise<PostWithID[] | undefined>
   findUserReposts(id: string[]): Promise<repostValidation[] | undefined>
   findPostById(id: string): Promise<PostWithID | undefined>
   findAllPosts(skip: number): Promise<PostWithID[] | undefined>

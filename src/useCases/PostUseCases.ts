@@ -3,12 +3,10 @@ import { EditPost, PostRepository } from '../repositories/PostRepository'
 import Post from '../entities/Post'
 import { UserUseCases } from './UserUseCases'
 import nodemailer from 'nodemailer'
-import { CommentRepository } from '../repositories/CommentRepository'
 
 class PostUseCases {
   constructor(
     private postRepository: PostRepository,
-    private commentRepository: CommentRepository,
     private userUseCases: UserUseCases
   ) {}
 
@@ -253,8 +251,6 @@ class PostUseCases {
     }
   }
 
-  // COMMENT CASES
-
   async createComment(originalPostID: string, post: Post) {
     if (!originalPostID) {
       throw new HttpException('Post id is required', 400)
@@ -297,7 +293,7 @@ class PostUseCases {
     post.coments = []
     post.originalPost = originalPost._id
 
-    const result = await this.commentRepository.createComment(post)
+    const result = await this.postRepository.createComment(post)
     if (!result) {
       throw new HttpException('Comment not created', 500)
     }
@@ -323,7 +319,7 @@ class PostUseCases {
       return []
     }
 
-    const comments = await this.commentRepository.findAllPostComments(post.coments, skip)
+    const comments = await this.postRepository.findAllPostComments(post.coments, skip)
     if(!comments) {
       throw new HttpException('Comments not found', 404)
     }

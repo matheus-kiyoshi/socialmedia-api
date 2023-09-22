@@ -33,9 +33,9 @@ const PostModel = mongoose.model('Post', new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  isReposted: {
-    type: Boolean,
-    default: false
+  type: {
+    type: String,
+    default: 'post'
   },
   originalPost: {
     type: String,
@@ -107,7 +107,7 @@ class PostRepositoryMongoose implements PostRepository {
 
   async rePost(post: Post, postID: string): Promise<PostWithID | undefined> {
     const postModel = new PostModel(post)
-    postModel.isReposted = true
+    postModel.type = 'repost'
     postModel.originalPost = postID
 
     await postModel.save()
@@ -122,8 +122,17 @@ class PostRepositoryMongoose implements PostRepository {
       { new: true }
     )
 
-    return postModel ? postModel.toObject() : undefined
+    return postReposted ? postReposted.toObject() : undefined
   }
+
+  async createComment(post: Post): Promise<PostWithID | undefined> {
+		const postModel = new PostModel(post)
+    postModel.type = 'comment'
+
+		await postModel.save()
+
+		return postModel ? postModel.toObject() : undefined
+	}
 
   async addCommentToPost(postID: string, commentID: string): Promise<string> {
     const postModel = await PostModel.findByIdAndUpdate(
@@ -137,6 +146,12 @@ class PostRepositoryMongoose implements PostRepository {
     )
 
     return 'Comment added'
+  }
+
+  async findAllPostComments(commentsID: string[], skip: number): Promise<PostWithID[] | undefined> {
+    const posts = await PostModel.find({ _id: { $in: commentsID } }).select('-__v').skip(skip).limit(20).exec()
+
+    return posts ? posts.map((post) => post.toObject()) : undefined
   }
 
   async findUserReposts(id: string[]): Promise<repostValidation[] | undefined> {
