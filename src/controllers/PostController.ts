@@ -159,6 +159,17 @@ class postController {
       next(error)
     }
   }
+
+  async searchPosts(req: Request, res: Response, next: NextFunction) {
+    const query = req.query.q as string
+
+    try {
+      const posts = await this.postUseCases.searchPosts(query)
+      return res.status(200).json(posts)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export { postController }

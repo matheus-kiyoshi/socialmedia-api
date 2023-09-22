@@ -171,6 +171,16 @@ class PostRepositoryMongoose implements PostRepository {
 
     return posts ? posts.map((post) => post.toObject()) : undefined
   }
+
+  async searchPosts(query: string): Promise<PostWithID[] | undefined> {
+    const posts = await PostModel.find(
+      { 
+        content: { $regex: query, $options: 'i' } 
+      }
+    ).select('-__v').exec()
+
+    return posts ? posts.map((post) => post.toObject()) : undefined
+  }
 }
 
 export { PostRepositoryMongoose }

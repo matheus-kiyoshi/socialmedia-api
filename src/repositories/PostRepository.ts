@@ -30,6 +30,7 @@ interface PostRepository {
   findUserReposts(id: string[]): Promise<repostValidation[] | undefined>
   findPostById(id: string): Promise<PostWithID | undefined>
   findAllPosts(skip: number): Promise<PostWithID[] | undefined>
+  searchPosts(query: string): Promise<PostWithID[] | undefined>
 }
 
 export { PostRepository }

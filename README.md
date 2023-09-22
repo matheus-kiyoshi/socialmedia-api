@@ -66,7 +66,7 @@
   - `/api/search/users` (GET) => Search users
     - DONE
   - `/api/search/posts` (GET) => Search posts
-    - TODO
+    - DONE
 
 # To Think About
 

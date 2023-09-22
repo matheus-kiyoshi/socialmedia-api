@@ -73,6 +73,10 @@ class PostRoutes {
 			'/posts/:id/comments',
 			this.postController.findAllPostComments.bind(this.postController)
 		)
+		this.router.get(
+			'/p/search',
+			this.postController.searchPosts.bind(this.postController)
+		)
 	}
 }
 

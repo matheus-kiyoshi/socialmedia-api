@@ -326,6 +326,15 @@ class PostUseCases {
     
     return comments
   }
+
+  async searchPosts(query: string) {
+    if (!query) {
+      throw new HttpException('Query is required', 400)
+    }
+
+    const posts = await this.postRepository.searchPosts(query)
+    return posts
+  }
 }
 
 export { PostUseCases }
