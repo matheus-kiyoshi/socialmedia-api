@@ -206,6 +206,14 @@ class UserUseCases {
     }
 
     const result = await this.userRepository.updateUserFollows(user, userFollow)
+    if (!result) {
+      throw new HttpException('Internal server error', 500)
+    }
+    
+    if (userFollow._id !== user._id) {
+      await this.userRepository.addNotification(userFollow._id, 'follow', user._id)
+    }
+    
     return result
   }
 
@@ -472,6 +480,21 @@ class UserUseCases {
     } catch (error) {
       throw new HttpException('Internal server error', 500)
     }
+  }
+
+  async addNotification(userID: string, type: string, notID: string) {
+    if (!userID) {
+      throw new HttpException('User id is required', 400)
+    }
+    if (!type) {
+      throw new HttpException('Type is required', 400)
+    }
+    if (!notID) {
+      throw new HttpException('Notification id is required', 400)
+    }
+
+    const result = await this.userRepository.addNotification(userID, type, notID)
+    return result
   }
 
   imageToBase64(filePath: string): string {

@@ -36,8 +36,10 @@ const UserModel = mongoose.model('User', new mongoose.Schema({
   isBlocked: {
     type: Boolean,
     default: false
+  },
+  notifications: Array  
   }
-}))
+))
 
 class UserRepositoryMongoose implements UserRepository {
   async create(user: User): Promise<unknown> {
@@ -227,6 +229,16 @@ class UserRepositoryMongoose implements UserRepository {
     ).select('username nickname icon bio isBlocked').exec()
 
     return userModel ? userModel.map(user => user.toObject()) : undefined
+  }
+
+  async addNotification(userID: string, type: string, notID: string): Promise<string> {
+    const userModel = await UserModel.findByIdAndUpdate(
+      userID,
+      { $push: { notifications: [type, notID, new Date()] } },
+      { new: true }
+    )
+
+    return 'Notification added'
   }
 }
 

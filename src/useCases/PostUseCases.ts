@@ -121,6 +121,14 @@ class PostUseCases {
     }
 
     const result = await this.postRepository.likePost(post._id, user._id)
+    if (!result) {
+      throw new HttpException('Internal server error', 500)
+    }
+
+    if (author._id !== user._id) {
+      await this.userUseCases.addNotification(author._id, 'like', user._id)
+    }
+    
     return result
   }
 
@@ -186,6 +194,9 @@ class PostUseCases {
     }
 
     await this.userUseCases.addRepostToUser(user._id, result._id)
+    if (post.authorID !== user._id) {
+      await this.userUseCases.addNotification(post.authorID, 'repost', user._id)
+    }
 
     return result
   }
@@ -300,6 +311,9 @@ class PostUseCases {
 
     await this.postRepository.addCommentToPost(originalPostID, result._id)
     await this.userUseCases.addPostToUser(user._id, result._id)
+    if (originalPost.authorID !== user._id) {
+      await this.userUseCases.addNotification(originalPost.authorID, 'comment', user._id)
+    }
     
     return result
   }

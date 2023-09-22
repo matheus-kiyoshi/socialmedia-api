@@ -123,8 +123,6 @@ class postController {
     }
   }
 
-  // Comments Controller
-
   async createComment(req: Request, res: Response, next: NextFunction) {
     const { username } = req.user
     const { id } = req.params

@@ -43,6 +43,7 @@ interface UserRepository {
   findAllFollowers(username: string, skip: number): Promise<PublicUserCard[] | undefined>
   findAllFollowing(username: string, skip: number): Promise<PublicUserCard[] | undefined>
   findAll(): Promise<UserWithID[] | undefined>
+  addNotification(userID: string, type: string, notID: string): Promise<string>
 }
 
 export { UserRepository }
