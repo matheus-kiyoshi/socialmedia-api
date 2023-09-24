@@ -1,6 +1,6 @@
 ## SOCIAL MEDIA API
 
-  - WORK IN PROGRESS
+ - Production
 
 # USER
   - DONE
