@@ -12,6 +12,10 @@ const PostModel = mongoose.model('Post', new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  username: {
+    type: String,
+    required: true
+  },
   content: String,
   media: {
     type: Array, 

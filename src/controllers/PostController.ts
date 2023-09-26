@@ -16,7 +16,8 @@ class postController {
 
     try {
       const post = await this.postUseCases.createPost({
-        authorID: username, 
+        authorID: username,
+        username,
         content, 
         media: files
       })
@@ -143,6 +144,7 @@ class postController {
     try {
       const post = await this.postUseCases.createComment(id, {
         authorID: username, 
+        username,
         content, 
         media: files
       })

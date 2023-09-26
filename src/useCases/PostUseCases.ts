@@ -184,6 +184,7 @@ class PostUseCases {
 
     const POST = {
       authorID: user._id,
+      username: user.username,
       content: content,
       date: new Date(),
       media: files,

@@ -1,6 +1,7 @@
 class Post {
   constructor(
     public authorID: string,
+    public username: string,
     public content: string,
     public date?: Date,
     public coments?: string[],
