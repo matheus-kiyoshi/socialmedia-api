@@ -60,15 +60,10 @@ class UserController {
   async updateProfile(req: Request, res: Response, next: NextFunction) {
     const { username } = req.user
     const { nickname, bio } = req.body
-    const file = req.file
-    let icon
-
-    if (file) {
-      icon = file.filename
-    }
+    const { firebaseUrl } = req.body
 
     try {
-      await this.userUseCase.updateProfile(username, nickname, bio, icon)
+      await this.userUseCase.updateProfile(username, nickname, bio, firebaseUrl)
       return res.status(200).json({ message: 'Profile updated' })
     } catch (error) {
       next(error)

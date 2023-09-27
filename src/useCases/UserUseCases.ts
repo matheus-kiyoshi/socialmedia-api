@@ -42,9 +42,7 @@ class UserUseCases {
     user.postsCount = 0    
     user.bio = ''
     user.usersBlocked = []
-    
-    const defaultIcon = resolve(__dirname, '../../public/default-icon.jpg')
-    user.icon = this.imageToBase64(defaultIcon)
+    user.icon = 'https://firebasestorage.googleapis.com/v0/b/incognitosocial-d1ef2.appspot.com/o/default-icon.jpg?alt=media&token=62d80578-7758-4f54-a5bb-6e0e72542ffe'
 
     const result = await this.userRepository.create(user)
     return result

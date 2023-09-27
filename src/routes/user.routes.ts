@@ -5,6 +5,7 @@ import { UserController } from '../controllers/UserController'
 import checkToken from '../middlewares/checkToken.middleware'
 import { upload } from '../infra/multer'
 import path from 'path'
+import { uploadImage } from '../services/firebase'
 
 class UserRoutes {
   public router: Router
@@ -19,15 +20,10 @@ class UserRoutes {
 
   initRoutes() {
     // default route => /api/
-    this.router.get('/media/:filename', (req, res) => {
-      const filename = req.params.filename;
-      res.sendFile(path.join(__dirname, '../tmp/uploads', filename));
-    })
     this.router.post(
       '/register',
       this.userController.create.bind(this.userController)
     )
-    // TODO: change the response -> id to username
     this.router.post(
       '/login',
       this.userController.login.bind(this.userController)
@@ -49,6 +45,7 @@ class UserRoutes {
       '/profile',
       checkToken,
       upload.single('icon'),
+      uploadImage,
       this.userController.updateProfile.bind(this.userController)
     )
     this.router.delete(
