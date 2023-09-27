@@ -153,7 +153,7 @@ class PostRepositoryMongoose implements PostRepository {
   }
 
   async findAllPostComments(commentsID: string[], skip: number): Promise<PostWithID[] | undefined> {
-    const posts = await PostModel.find({ _id: { $in: commentsID } }).select('-__v').skip(skip).limit(20).exec()
+    const posts = await PostModel.find({ _id: { $in: commentsID } }).sort({ date: -1 }).select('-__v').skip(skip).limit(20).exec()
 
     return posts ? posts.map((post) => post.toObject()) : undefined
   }
@@ -171,7 +171,7 @@ class PostRepositoryMongoose implements PostRepository {
   }
 
   async findAllPosts(skip: number): Promise<PostWithID[] | undefined> {
-    const posts = await PostModel.find().select('-__v').skip(skip).limit(20).exec()
+    const posts = await PostModel.find().sort({ date: -1 }).select('-__v').skip(skip).limit(20).exec()
 
     return posts ? posts.map((post) => post.toObject()) : undefined
   }
