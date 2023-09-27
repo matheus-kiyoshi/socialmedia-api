@@ -7,19 +7,14 @@ class postController {
   async createPost(req: Request, res: Response, next: NextFunction) {
     const { username } = req.user
     const { content } = req.body
-    let files
-    if (req.files) {
-      files = (req.files as Express.Multer.File[]).map(
-        (file) => file.filename
-      )
-    }
+    const firebaseUrl = req.body.firebaseUrl
 
     try {
       const post = await this.postUseCases.createPost({
         authorID: username,
         username,
         content, 
-        media: files
+        media: firebaseUrl
       })
       return res.status(201).json(post)
     } catch (error) {
@@ -28,19 +23,17 @@ class postController {
   }
 
   async updatePost(req: Request, res: Response, next: NextFunction) {
-    const { id: authorID } = req.params
+    const { id: authorID } = req.user
     const id = req.params.id
     const { content } = req.body
-    const files = (req.files as Express.Multer.File[]).map(
-      (file) => file.filename
-    )
+    const firebaseUrl = req.body.firebaseUrl
 
     try {
       const post = await this.postUseCases.updatePost({
         id,
         authorID,
         content,
-        media: files
+        media: firebaseUrl
       })
       return res.status(200).json(post)
     } catch (error) {
@@ -102,15 +95,10 @@ class postController {
     const { id } = req.params
     const { username } = req.user
     const { content } = req.body
-    let files
-    if (req.files) {
-      files = (req.files as Express.Multer.File[]).map(
-        (file) => file.filename
-      )
-    }
+    const firebaseUrl = req.body.firebaseUrl
     
     try {
-      const result = await this.postUseCases.rePost(id, username, content, files)
+      const result = await this.postUseCases.rePost(id, username, content, firebaseUrl)
       return res.status(200).json({ message: result })
     } catch (error) {
       next(error)

@@ -55,6 +55,8 @@ class PostUseCases {
     if (!POST) {
       throw new HttpException('Post not found', 404)
     }
+    console.log("POST ID: ", post.id)
+    console.log("POST AUTHOR ID: ", post.authorID)
     if (POST?.authorID.toString() !== post.authorID) {
       throw new HttpException('You cannot update this post', 403)
     }

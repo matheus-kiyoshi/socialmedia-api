@@ -6,6 +6,7 @@ import { upload } from '../infra/multer'
 import checkToken from '../middlewares/checkToken.middleware'
 import { UserUseCases } from '../useCases/UserUseCases'
 import { UserRepositoryMongoose } from '../repositories/UserRepositoryMongoose'
+import { uploadImages } from '../services/postImagesUpload'
 
 class PostRoutes {
 	public router: Router
@@ -28,6 +29,7 @@ class PostRoutes {
 			'/posts',
 			checkToken,
 			upload.array('media', 4),
+			uploadImages,
 			this.postController.createPost.bind(this.postController)
 		)
 		this.router.get(
@@ -42,6 +44,7 @@ class PostRoutes {
 			'/posts/:id',
 			checkToken,
 			upload.array('media', 4),
+			uploadImages,
 			this.postController.updatePost.bind(this.postController)
 		)
 		this.router.delete(
@@ -57,6 +60,8 @@ class PostRoutes {
 		this.router.post(
 			'/posts/:id/repost',
 			checkToken,
+			upload.array('media', 4),
+			uploadImages,
 			this.postController.rePost.bind(this.postController)
 		)
 		this.router.post(
