@@ -82,7 +82,6 @@ class UserUseCases {
           expiresIn: '8h'
         }
       )
-
       return { msg: 'Login successful', token: token }
     } catch (error) {
       throw new HttpException('Internal server error', 500)

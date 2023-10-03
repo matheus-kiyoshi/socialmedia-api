@@ -12,9 +12,9 @@ function checkToken(req: Request, res: Response, next: NextFunction) {
 
   try {
     const secret = process.env.SECRET || ''
-    const { id, username } = jwt.verify(token, secret) as JwtPayload
+    const { id, username, nickname, icon, usersBlocked } = jwt.verify(token, secret) as JwtPayload
 
-    const user = { id: id, username: username }
+    const user = { id: id, username: username, nickname: nickname, icon: icon, usersBlocked: usersBlocked }
 
     if (!user) {
       return res.sendStatus(401).json({ message: 'Access denied' })
