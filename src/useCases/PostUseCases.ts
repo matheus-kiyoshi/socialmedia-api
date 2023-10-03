@@ -55,8 +55,6 @@ class PostUseCases {
     if (!POST) {
       throw new HttpException('Post not found', 404)
     }
-    console.log("POST ID: ", post.id)
-    console.log("POST AUTHOR ID: ", post.authorID)
     if (POST?.authorID.toString() !== post.authorID) {
       throw new HttpException('You cannot update this post', 403)
     }
@@ -109,10 +107,18 @@ class PostUseCases {
     if (!author) {
       throw new HttpException('Author not found', 404)
     }
-    if (author?.usersBlocked?.includes(user._id)) {
+
+    const authorBlocks = author.usersBlocked?.map((userBlocked) => {
+      return userBlocked.toString()
+    })
+    if (authorBlocks?.includes(user._id.toString())) {
       throw new HttpException('The author has blocked you', 409)
     }
-    if (user?.usersBlocked?.includes(author._id)) {
+
+    const userBlocks = user.usersBlocked?.map((userBlocked) => {
+      return userBlocked.toString()
+    })
+    if (userBlocks?.includes(author._id.toString())) {
       throw new HttpException('You have blocked the author', 409)
     }
 
@@ -130,7 +136,7 @@ class PostUseCases {
       throw new HttpException('Internal server error', 500)
     }
 
-    if (author._id !== user._id) {
+    if (author._id.toString() !== user._id.toString()) {
       await this.userUseCases.addNotification(author._id, 'like', user._id)
     }
     
@@ -162,14 +168,20 @@ class PostUseCases {
     }
 
     // verify if user blocked author
-    if (user.usersBlocked?.includes(post.authorID)) {
+    const userBlocks = user.usersBlocked?.map((userBlocked) => {
+      return userBlocked.toString()
+    })
+    if (userBlocks?.includes(post.authorID.toString())) {
       throw new HttpException('You have blocked the author', 409)
     }
 
     // verify if author blocked user
     const author = await this.userUseCases.findById(post.authorID)
     if (author) {
-      if (author.usersBlocked?.includes(user._id)) {
+      const authorBlocks = author.usersBlocked?.map((userBlocked) => {
+        return userBlocked.toString()
+      })
+      if (authorBlocks?.includes(user._id.toString())) {
         throw new HttpException('The author has blocked you', 409)
       }
     }
@@ -180,7 +192,7 @@ class PostUseCases {
 
       // verify if author already reposted
       reposts?.map((repost) => {
-        if (repost.originalPost === post._id) {
+        if (repost.originalPost === post._id.toString()) {
           throw new HttpException('You already reposted this post', 409)
         }
       })
@@ -204,7 +216,7 @@ class PostUseCases {
     }
 
     await this.userUseCases.addRepostToUser(user._id, result._id)
-    if (post.authorID !== user._id) {
+    if (post.authorID.toString() !== user._id.toString()) {
       await this.userUseCases.addNotification(post.authorID, 'repost', user._id)
     }
 
@@ -294,14 +306,20 @@ class PostUseCases {
     }
 
     // verify if user blocked author
-    if (user.usersBlocked?.includes(originalPost.authorID)) {
+    const userBlocks = user.usersBlocked?.map((userBlocked) => {
+      return userBlocked.toString()
+    })
+    if (userBlocks?.includes(originalPost.authorID.toString())) {
       throw new HttpException('You have blocked the author', 409)
     }
 
     // verify if author blocked user
     const author = await this.userUseCases.findById(originalPost.authorID)
     if (author) {
-      if (author.usersBlocked?.includes(user._id)) {
+      const authorBlocks = author.usersBlocked?.map((userBlocked) => {
+        return userBlocked.toString()
+      })
+      if (authorBlocks?.includes(user._id.toString())) {
         throw new HttpException('The author has blocked you', 409)
       }
     }
