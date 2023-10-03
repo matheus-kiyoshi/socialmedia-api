@@ -72,7 +72,10 @@ class UserUseCases {
       const token = jwt.sign(
         {
           id: user._id,
-          username: user.username
+          username: user.username,
+          nickname: user.nickname,
+          icon: user.icon,
+          usersBlocked: user.usersBlocked
         },
         secret,
         {
