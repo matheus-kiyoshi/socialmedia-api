@@ -158,7 +158,6 @@ class UserUseCases {
     }
     
     const user = await this.userRepository.findByUsername(username)
-    console.log(user)
     if (!user) {
       throw new HttpException('User not found', 404)
     }
@@ -193,16 +192,25 @@ class UserUseCases {
       throw new HttpException('User not found', 404)
     }
 
-    if (user.usersBlocked?.includes(userFollow._id)) {
+    const usersBlocked = user.usersBlocked?.map((userBlocked) => {
+      return userBlocked.toString()
+    })
+    if (usersBlocked?.includes(userFollow._id.toString())) {
       throw new HttpException('You cannot follow blocked users', 400)
     }
 
-    if (userFollow.usersBlocked?.includes(user._id)) {
+    const followBlocks = userFollow.usersBlocked?.map((userBlocked) => {
+      return userBlocked.toString()
+    })
+    if (followBlocks?.includes(user._id.toString())) {
       throw new HttpException('The user blocked you', 400)
     }
 
     // verify if user is already following
-    if (user.following?.includes(userFollow._id)) {
+    const following = user.following?.map((following) => {
+      return following.toString()
+    })
+    if (following?.includes(userFollow._id.toString())) {
       throw new HttpException('User is already following', 409)
     }
 
@@ -211,7 +219,7 @@ class UserUseCases {
       throw new HttpException('Internal server error', 500)
     }
     
-    if (userFollow._id !== user._id) {
+    if (userFollow._id.toString() !== user._id.toString()) {
       await this.userRepository.addNotification(userFollow._id, 'follow', user._id)
     }
     
@@ -241,7 +249,10 @@ class UserUseCases {
     }
 
     // verify if user is already unfollowed
-    if (!user.following?.includes(userUnfollow._id)) {
+    const following = user.following?.map((following) => {
+      return following.toString()
+    })
+    if (!following?.includes(userUnfollow._id.toString())) {
       throw new HttpException('You are not following this user', 409)
     }
 
@@ -272,7 +283,10 @@ class UserUseCases {
     }
 
     // verify if user is already blocked
-    if (user.usersBlocked?.includes(userBlock._id)) {
+    const userBlocks = user.usersBlocked?.map((userBlocked) => {
+      return userBlocked.toString()
+    })
+    if (userBlocks?.includes(userBlock._id.toString())) {
       throw new HttpException('User is already blocked', 409)
     }
 
@@ -303,7 +317,10 @@ class UserUseCases {
     }
 
     // verify if user is already unblocked
-    if (!user.usersBlocked?.includes(userUnblock._id)) {
+    const usersBlocked = user.usersBlocked?.map((userBlocked) => {
+      return userBlocked.toString()
+    })
+    if (!usersBlocked?.includes(userUnblock._id.toString())) {
       throw new HttpException('User is not blocked', 409)
     }
 
@@ -320,7 +337,6 @@ class UserUseCases {
     }
 
     const user = await this.userRepository.findById(userID)
-    console.log(user)
     if (!user) {
       throw new HttpException('User not found', 404)
     }
