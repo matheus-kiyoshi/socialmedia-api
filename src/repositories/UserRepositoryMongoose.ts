@@ -3,10 +3,6 @@ import { PublicUser, PublicUserCard, UserRepository, UserWithID } from './UserRe
 import User from '../entities/User'
 
 const UserModel = mongoose.model('User', new mongoose.Schema({
-  _id: {
-    type: String,
-    default: new mongoose.Types.ObjectId().toString()
-  },
   username: String,
   password: String,
   nickname: String,
@@ -38,13 +34,14 @@ const UserModel = mongoose.model('User', new mongoose.Schema({
     default: false
   },
   notifications: Array  
-  }
+  },
+  { autoIndex: false }
 ))
 
 class UserRepositoryMongoose implements UserRepository {
   async create(user: User): Promise<unknown> {
     const userModel = new UserModel(user)
-
+    console.log(userModel)
     await userModel.save()
 
     return userModel

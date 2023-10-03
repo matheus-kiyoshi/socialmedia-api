@@ -3,10 +3,6 @@ import { EditPost, PostRepository, PostWithID, repostValidation } from './PostRe
 import Post from '../entities/Post'
 
 const PostModel = mongoose.model('Post', new mongoose.Schema({
-  _id: {
-    type: String,
-    default: new mongoose.Types.ObjectId().toString()
-  },
   authorID: {
     type: String,
     ref: 'User',
