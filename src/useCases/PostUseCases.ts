@@ -117,7 +117,10 @@ class PostUseCases {
     }
 
     // verify if user already liked the post
-    if (post?.likes?.includes(user._id)) {
+    const likes = post.likes?.map((like) => {
+      return like.toString()
+    })
+    if (likes?.includes(user._id.toString())) {
       const result = await this.postRepository.unlikePost(post._id, user._id)
       return result
     }

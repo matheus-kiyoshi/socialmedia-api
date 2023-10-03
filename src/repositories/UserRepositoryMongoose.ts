@@ -163,7 +163,7 @@ class UserRepositoryMongoose implements UserRepository {
 
   async findByUsername(username: string): Promise<UserWithID | undefined> {
     const userModel = await UserModel.findOne({ username: username }).exec()
-
+    
     return userModel ? userModel.toObject() : undefined
   }
 

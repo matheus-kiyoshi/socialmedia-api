@@ -158,6 +158,7 @@ class UserUseCases {
     }
     
     const user = await this.userRepository.findByUsername(username)
+    console.log(user)
     if (!user) {
       throw new HttpException('User not found', 404)
     }
