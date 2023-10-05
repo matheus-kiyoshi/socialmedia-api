@@ -14,7 +14,7 @@ class PostUseCases {
     if (!post.authorID) {
       throw new HttpException('Username is required', 400)
     }
-    if (!post.content) {
+    if (!post.content && !post.media) {
       throw new HttpException('Content is required', 400)
     }
 
@@ -216,6 +216,7 @@ class PostUseCases {
     }
 
     await this.userUseCases.addRepostToUser(user._id, result._id)
+    await this.postRepository.addRepostAuthorToPost(post._id, user._id)
     if (post.authorID.toString() !== user._id.toString()) {
       await this.userUseCases.addNotification(post.authorID, 'repost', user._id)
     }
@@ -291,7 +292,7 @@ class PostUseCases {
     if (!post.authorID) {
       throw new HttpException('Username is required', 400)
     }
-    if (!post.content) {
+    if (!post.content && !post.media) {
       throw new HttpException('Content is required', 400)
     }
 

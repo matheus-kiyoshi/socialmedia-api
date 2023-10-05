@@ -72,6 +72,8 @@ class PostRoutes {
 		this.router.post(
 			'/posts/:id/comments',
 			checkToken,
+			upload.array('media', 4),
+			uploadImages,
 			this.postController.createComment.bind(this.postController)
 		)
 		this.router.get(

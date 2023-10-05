@@ -29,6 +29,10 @@ const PostModel = mongoose.model('Post', new mongoose.Schema({
     type: Array,
     ref: 'User'
   },
+  repostsAuthorId: {
+    type: Array,
+    ref: 'User',
+  },
   wasEdited: {
     type: Boolean,
     default: false
@@ -146,6 +150,20 @@ class PostRepositoryMongoose implements PostRepository {
     )
 
     return 'Comment added'
+  }
+
+  async addRepostAuthorToPost(postID: string, userID: string): Promise<string> {
+    const postModel = await PostModel.findByIdAndUpdate(
+      postID,
+      {
+        $push: {
+          repostsAuthorId: userID
+        }
+      },
+      { new: true }
+    )
+
+    return 'Repost author added'
   }
 
   async findAllPostComments(commentsID: string[], skip: number): Promise<PostWithID[] | undefined> {

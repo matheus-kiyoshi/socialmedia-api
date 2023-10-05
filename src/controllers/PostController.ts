@@ -122,19 +122,14 @@ class postController {
     const { username } = req.user
     const { id } = req.params
     const { content } = req.body
-    let files
-    if (req.files) {
-      files = (req.files as Express.Multer.File[]).map(
-        (file) => file.filename
-      )
-    }
+    const firebaseUrl = req.body.firebaseUrl
 
     try {
       const post = await this.postUseCases.createComment(id, {
         authorID: username, 
         username,
         content, 
-        media: files
+        media: firebaseUrl
       })
       return res.status(201).json(post)
     } catch (error) {
