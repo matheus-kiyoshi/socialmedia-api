@@ -8,6 +8,7 @@ class Post {
     public likes?: string[],
     public reposts?: string[],
     public originalPost?: string,
+    public type?: 'post' | 'repost' | 'comment',
     public media?: string[]
   ) {}
 }

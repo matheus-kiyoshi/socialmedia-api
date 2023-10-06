@@ -166,6 +166,56 @@ class PostRepositoryMongoose implements PostRepository {
     return 'Repost author added'
   }
 
+  async removeRepostFromPost(originalPostID: string, postID: string, userID: string): Promise<string> {
+    try {
+      const postObjectId = new mongoose.Types.ObjectId(postID)
+      const userObjectId = new mongoose.Types.ObjectId(userID)
+
+      const postModel = await PostModel.findByIdAndUpdate(
+        originalPostID,
+        {
+          $pull: {
+            reposts: postObjectId,
+            repostsAuthorId: userObjectId
+          }
+        },
+        { new: true }
+      )
+
+      if (!postModel) {
+        return 'Post not found'
+      }
+
+      return 'Repost removed'
+    } catch (error) {
+      return 'Error removing repost'
+    }
+  }
+
+  async removeCommentFromPost(postID: string, commentID: string): Promise<string> {
+    try {
+      const objectId = new mongoose.Types.ObjectId(commentID)
+
+      const postModel = await PostModel.findByIdAndUpdate(
+        postID,
+        {
+          $pull: {
+            coments: objectId
+          }
+        },
+        { new: true }
+      )
+
+      if (!postModel) {
+        return 'Post not found'
+      }
+
+      return 'Comment removed'
+    } catch (error) {
+      return 'Error removing comment'
+    }
+  }
+
   async findAllPostComments(commentsID: string[], skip: number): Promise<PostWithID[] | undefined> {
     const posts = await PostModel.find({ _id: { $in: commentsID } }).sort({ date: -1 }).select('-__v').skip(skip).limit(20).exec()
 

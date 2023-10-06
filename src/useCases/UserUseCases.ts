@@ -515,6 +515,30 @@ class UserUseCases {
     return result
   }
 
+  async removePostFromUser(userID: string, postID: string) {
+    if (!userID) {
+      throw new HttpException('User id is required', 400)
+    }
+    if (!postID) {
+      throw new HttpException('Post id is required', 400)
+    }
+
+    const result = await this.userRepository.removePostFromUser(userID, postID)
+    return result
+  }
+
+  async removeRepostFromUser(userID: string, postID: string) {
+    if (!userID) {
+      throw new HttpException('User id is required', 400)
+    }
+    if (!postID) {
+      throw new HttpException('Post id is required', 400)
+    }
+
+    const result = await this.userRepository.removeRepostFromUser(userID, postID)
+    return result
+  }
+
   imageToBase64(filePath: string): string {
     const imageData = fs.readFileSync(filePath)
     const mimeType = mime.getType(filePath)

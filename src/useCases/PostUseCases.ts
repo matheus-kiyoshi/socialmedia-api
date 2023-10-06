@@ -79,7 +79,22 @@ class PostUseCases {
       throw new HttpException('You cannot delete this post', 403)
     }
 
-    await this.postRepository.deletePost(id)
+    const response = await this.postRepository.deletePost(id)
+    if (response) {
+      if (post.type === 'post') {
+        await this.userUseCases.removePostFromUser(authorID, id)
+      } else if (post.type === 'repost') {
+        await this.userUseCases.removeRepostFromUser(authorID, id)
+        if (post.originalPost) {
+          await this.postRepository.removeRepostFromPost(post.originalPost, id, authorID)
+        }
+      } else if (post.type === 'comment') {
+        await this.userUseCases.removePostFromUser(authorID, id)
+        if (post.originalPost) {
+          await this.postRepository.removeCommentFromPost(post.originalPost, id)
+        }
+      }
+    }
     return 'Post deleted'
   }
 

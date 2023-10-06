@@ -44,6 +44,8 @@ interface UserRepository {
   findAllFollowing(username: string, skip: number): Promise<PublicUserCard[] | undefined>
   findAll(): Promise<UserWithID[] | undefined>
   addNotification(userID: string, type: string, notID: string): Promise<string>
+  removePostFromUser(userID: string, postID: string): Promise<string>
+  removeRepostFromUser(userID: string, postID: string): Promise<string>
 }
 
 export { UserRepository }

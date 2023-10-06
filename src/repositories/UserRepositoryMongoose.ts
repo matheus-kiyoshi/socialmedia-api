@@ -237,6 +237,44 @@ class UserRepositoryMongoose implements UserRepository {
 
     return 'Notification added'
   }
+
+  async removePostFromUser(userID: string, postID: string): Promise<string> {
+    try {
+      const objectId = new mongoose.Types.ObjectId(postID);
+      const userModel = await UserModel.findByIdAndUpdate(
+        userID,
+        { $pull: { posts: objectId } },
+        { new: true }
+      );
+  
+      if (!userModel) {
+        return 'User not found';
+      }
+  
+      return 'Post removed';
+    } catch (error) {
+      return 'Error removing post';
+    }
+  }
+
+  async removeRepostFromUser(userID: string, postID: string): Promise<string> {
+    try {
+      const objectId = new mongoose.Types.ObjectId(postID)
+      const userModel = await UserModel.findByIdAndUpdate(
+        userID,
+        { $pull: { reposts: postID } },
+        { new: true }
+      )
+  
+      if (!userModel) {
+        return 'User not found';
+      }
+
+      return 'Repost removed'
+    } catch (error) {
+      return 'Error removing repost'
+    }
+  }
 }
 
 export { UserRepositoryMongoose }
