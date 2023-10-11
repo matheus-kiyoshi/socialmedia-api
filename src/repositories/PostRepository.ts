@@ -34,6 +34,7 @@ interface PostRepository {
   searchPosts(query: string): Promise<PostWithID[] | undefined>
   removeRepostFromPost(originalPostID: string, postID: string, userID: string): Promise<string>
   removeCommentFromPost(postID: string, commentID: string): Promise<string>
+  findAllUserPosts(username: string, skip: number): Promise<PostWithID[] | undefined>
 }
 
 export { PostRepository }

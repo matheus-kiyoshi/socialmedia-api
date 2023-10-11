@@ -393,6 +393,16 @@ class PostUseCases {
     const posts = await this.postRepository.searchPosts(query)
     return posts
   }
+
+  async findAllUserPosts(username: string, skip?: string) {
+    if (!username) {
+      throw new HttpException('Username is required', 400)
+    }
+    const skipParam = skip ? parseInt(skip, 10) : 0
+   
+    const posts = await this.postRepository.findAllUserPosts(username, skipParam)
+    return posts
+  }
 }
 
 export { PostUseCases }

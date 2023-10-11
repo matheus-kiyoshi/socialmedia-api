@@ -84,6 +84,10 @@ class PostRoutes {
 			'/p/search',
 			this.postController.searchPosts.bind(this.postController)
 		)
+		this.router.get(
+			'/users/:username/posts',
+			this.postController.findAllUserPosts.bind(this.postController)
+		)
 	}
 }
 

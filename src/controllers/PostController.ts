@@ -159,6 +159,18 @@ class postController {
       next(error)
     }
   }
+
+  async findAllUserPosts(req: Request, res: Response, next: NextFunction) {
+    const { username } = req.params
+    const skip = req.query.skip as string | undefined
+    
+    try {
+      const posts = await this.postUseCases.findAllUserPosts(username, skip)
+      return res.status(200).json(posts)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export { postController }
