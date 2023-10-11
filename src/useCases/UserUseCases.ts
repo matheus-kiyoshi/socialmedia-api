@@ -43,6 +43,7 @@ class UserUseCases {
     user.bio = ''
     user.usersBlocked = []
     user.icon = 'https://firebasestorage.googleapis.com/v0/b/incognitosocial-d1ef2.appspot.com/o/default-icon.jpg?alt=media&token=62d80578-7758-4f54-a5bb-6e0e72542ffe'
+    user.banner = 'https://firebasestorage.googleapis.com/v0/b/incognitosocial-d1ef2.appspot.com/o/default-header.jpg?alt=media&token=325b21a8-6aff-4704-b0cb-4f7e99f0f023'
 
     const result = await this.userRepository.create(user)
     return result
@@ -149,7 +150,7 @@ class UserUseCases {
     return { msg: 'User deleted' }
   }
 
-  async updateProfile(username: string, nickname: string, bio: string,  icon?: string) {
+  async updateProfile(username: string, nickname: string, bio: string,  icon?: string, banner?: string) {
     if (!username) {
       throw new HttpException('Username is required', 400)
     }
@@ -165,6 +166,7 @@ class UserUseCases {
     user.nickname = nickname
     user.bio = bio
     user.icon = icon
+    user.banner = banner
 
     const updateProfile = await this.userRepository.updateProfile(user)
     return updateProfile

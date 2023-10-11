@@ -8,6 +8,7 @@ export interface PublicUser {
   nickname: string
   username: string
   icon: string
+  banner: string
   bio: string
   followers?: number
   following?: number

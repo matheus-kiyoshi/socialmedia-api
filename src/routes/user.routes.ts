@@ -5,7 +5,7 @@ import { UserController } from '../controllers/UserController'
 import checkToken from '../middlewares/checkToken.middleware'
 import { upload } from '../infra/multer'
 import path from 'path'
-import { uploadImage } from '../services/firebase'
+import { uploadImage, uploadProfileImage } from '../services/firebase'
 
 class UserRoutes {
   public router: Router
@@ -44,8 +44,17 @@ class UserRoutes {
     this.router.patch(
       '/profile',
       checkToken,
-      upload.single('icon'),
-      uploadImage,
+      upload.fields([
+        {
+          name: 'icon',
+          maxCount: 1
+        },
+        {
+          name: 'banner',
+          maxCount: 1
+        }
+      ]),
+      uploadProfileImage,
       this.userController.updateProfile.bind(this.userController)
     )
     this.router.delete(

@@ -8,6 +8,7 @@ const UserModel = mongoose.model('User', new mongoose.Schema({
   nickname: String,
   bio: String,
   icon: String,
+  banner: String,
   followers: {
     type: Array,
     ref: 'User'
@@ -70,6 +71,7 @@ class UserRepositoryMongoose implements UserRepository {
         $set: {
           icon: user.icon,
           bio: user.bio,
+          banner: user.banner,
           nickname: user.nickname 
         }
       },

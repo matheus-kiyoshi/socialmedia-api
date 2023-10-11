@@ -10,7 +10,8 @@ class User {
     public usersBlocked?: string[],
     public posts?: string[],
     public reposts?: string[],
-    public icon?: string
+    public icon?: string,
+    public banner?: string
   ) {}
 }
 
