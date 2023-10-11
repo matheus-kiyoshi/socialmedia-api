@@ -275,6 +275,14 @@ class UserRepositoryMongoose implements UserRepository {
       return 'Error removing repost'
     }
   }
+
+  async findFollower(id: string, userID: string): Promise<UserWithID | undefined> {
+    const userModel = await UserModel.findById(userID).select('followers').exec()
+
+    const follower = userModel?.followers.find(follower => follower.toString() === id)
+
+    return follower ? follower : undefined
+  }
 }
 
 export { UserRepositoryMongoose }

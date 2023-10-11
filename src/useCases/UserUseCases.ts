@@ -539,6 +539,23 @@ class UserUseCases {
     return result
   }
 
+  async findFollower(userID: string, username: string) {
+    if (!userID) {
+      throw new HttpException('User id is required', 400)
+    }
+    if (!username) {
+      throw new HttpException('Username is required', 400)
+    }
+
+    const user = await this.userRepository.findByUsername(username)
+    if (!user) {
+      throw new HttpException('User not found', 404)
+    }
+
+    const result = await this.userRepository.findFollower(userID, user._id)
+    return result
+  }
+
   imageToBase64(filePath: string): string {
     const imageData = fs.readFileSync(filePath)
     const mimeType = mime.getType(filePath)

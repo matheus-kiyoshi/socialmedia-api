@@ -68,6 +68,11 @@ class UserRoutes {
       this.userController.findAllFollowers.bind(this.userController)
     )
     this.router.get(
+      '/users/:username/follower',
+      checkToken,
+      this.userController.findFollower.bind(this.userController)
+    )
+    this.router.get(
       '/users/:username/following',
       this.userController.findAllFollowing.bind(this.userController)
     )

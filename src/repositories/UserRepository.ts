@@ -46,6 +46,7 @@ interface UserRepository {
   addNotification(userID: string, type: string, notID: string): Promise<string>
   removePostFromUser(userID: string, postID: string): Promise<string>
   removeRepostFromUser(userID: string, postID: string): Promise<string>
+  findFollower(id: string, userID: string): Promise<UserWithID | undefined>
 }
 
 export { UserRepository }

@@ -214,6 +214,22 @@ class UserController {
     }
   }
 
+  async findFollower(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.user
+    const { username } = req.params
+
+    try {
+      const response = await this.userUseCase.findFollower(id, username)
+      if (response) {
+        return res.status(200).json(response)
+      } else {
+        return res.status(404).json({ message: 'User not found' })
+      }
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async searchUsers(req: Request, res: Response, next: NextFunction) {
     const query = req.query.q as string
     
