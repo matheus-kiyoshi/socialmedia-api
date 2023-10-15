@@ -165,8 +165,14 @@ class UserUseCases {
 
     user.nickname = nickname
     user.bio = bio
-    user.icon = icon
-    user.banner = banner
+
+    if (icon) {
+      user.icon = icon
+    }
+
+    if (banner) {
+      user.banner = banner
+    }
 
     const updateProfile = await this.userRepository.updateProfile(user)
     return updateProfile

@@ -79,7 +79,7 @@ export const uploadProfileImage = (
       const firebaseUrl = `https://storage.googleapis.com/${BUCKET}/${fileName}`
       uploadedUrls[fieldName] = firebaseUrl
 
-      if (Object.keys(uploadedUrls).length === 2) {
+      if (Object.keys(uploadedUrls).length === Object.keys(images).length) {
         req.body.uploadedUrls = uploadedUrls
         next()
       }
