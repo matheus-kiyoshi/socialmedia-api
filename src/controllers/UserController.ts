@@ -60,8 +60,12 @@ class UserController {
   async updateProfile(req: Request, res: Response, next: NextFunction) {
     const { username } = req.user
     const { nickname, bio } = req.body
-    const { icon, banner } = req.body.uploadedUrls
-
+    const { icon, banner } = req.body.uploadedUrls || {}
+    console.log(username)
+    console.log(nickname)
+    console.log(bio)
+    console.log(icon)
+    console.log(banner)
     try {
       await this.userUseCase.updateProfile(username, nickname, bio, icon, banner)
       return res.status(200).json({ message: 'Profile updated' })
